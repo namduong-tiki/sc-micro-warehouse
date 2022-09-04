@@ -7,7 +7,6 @@
   "private": true,
   "baseUrl": "http://namduong-tiki.github.io/sc-micro-warehouse/",
   "homepage": "/sc-micro-warehouse/",
-
   "scripts": {
     "start": "node app"
   },
@@ -47,5 +46,8 @@
   },
   "lint-staged": {
     "*.{ts,tsx,js}": "yarn lint"
+  },
+  "dependencies": {
+    "express": "^4.18.1"
   }
 }
