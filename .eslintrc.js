@@ -1,0 +1,27 @@
+module.exports = {
+  env: {
+    browser: true,
+    node: true,
+    es6: true,
+  },
+  parser: '@typescript-eslint/parser',
+  plugins: ['react-hooks', '@typescript-eslint'],
+  rules: {
+    'import/prefer-default-export': 'off',
+    'react/react-in-jsx-scope': 'off',
+    'react/jsx-props-no-spreading': 'off',
+    'import/no-extraneous-dependencies': 'off',
+    'react/require-default-props': 'off',
+    'react/button-has-type': 'off',
+    'no-unused-expressions': [2, { allowShortCircuit: true }],
+    'arrow-parens': ['error', 'as-needed'],
+    'react-hooks/rules-of-hooks': 'warn',
+    'react-hooks/exhaustive-deps': 'warn',
+    'jsx-a11y/anchor-is-valid': 'off',
+    'arrow-parens': 'off',
+    'no-console': ['warn', { allow: ['warn', 'error'] }],
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': 'warn',
+    'no-debugger': 'warn',
+  },
+};

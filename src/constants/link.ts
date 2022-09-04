@@ -1,0 +1,23 @@
+export const LINK_CDN_IMAGE = {
+    logoQuestion: 'https://salt.tikicdn.com/ts/tmp/c3/58/5d/08387339159ab65445c2a55a262ce98d.png',
+    logoCupid:'https://salt.tikicdn.com/ts/tmp/a8/18/c1/a250a63462eeb6bb8f8f8c43d4998967.png',
+    logoCheckList:'https://salt.tikicdn.com/ts/tmp/da/0b/a7/650bc2d4d683e6c979b66ed07370fee0.png',
+    logoD2D: 'https://salt.tikicdn.com/ts/tmp/06/fc/38/ee38699879de0259e937b9940f113b99.png',
+    filterIcon :'https://salt.tikicdn.com/ts/tmp/89/f0/45/0ef87a25e2a1eba92796dcd327025a04.png',
+    logoTikiNow: 'https://salt.tikicdn.com/ts/tmp/40/30/86/12d3d40f3c7d48f21dd4f61ee9d2c7a7.png',
+    iconAddNew:'https://salt.tikicdn.com/ts/tmp/e4/59/77/6abf5e754c80bcb92644350e63f4a48c.png',
+    iconCodePrint:'https://salt.tikicdn.com/ts/tmp/01/79/47/edd7cf73065378086845d07366a057af.png',
+    iconDelivery:'https://salt.tikicdn.com/ts/tmp/f1/a8/21/45195e861aa790b143e1a83650ecdbb8.png',
+    logoTikiTruck: 'https://salt.tikicdn.com/ts/tmp/06/fc/38/ee38699879de0259e937b9940f113b99.png',
+    documentLogo:'https://salt.tikicdn.com/ts/tmp/d3/96/61/4a94bcc5c8a795a55bb876d2ae9c1903.png',
+    freeTag:'https://salt.tikicdn.com/ts/tmp/9b/e4/63/71f6c6fabd08d9803864a51e68fb9a9c.png',
+    freeTagEn:'https://salt.tikicdn.com/ts/tmp/7b/cf/9e/53dd665237dfc04d3de6b7f389f8e02f.png',
+    TikiNOW:'https://salt.tikicdn.com/ts/tmp/98/5a/d2/161e8f50ccc82eca42f4b9121efa79de.png',
+    logoPackage:'https://salt.tikicdn.com/ts/tmp/55/ed/17/ab5e9ceec205971502c0428acfec388c.png',
+    iconSeller:'https://salt.tikicdn.com/ts/tmp/57/c0/ac/4e6d5e776f985b3757455036742be23d.png',
+    iconWarehouse:'https://salt.tikicdn.com/ts/tmp/9a/b3/5a/9fcb68d774e82c77fef447c9068bcc6e.png',
+    logoNew:'https://salt.tikicdn.com/ts/tmp/59/d3/37/bde7addcb32d5f9a060ec9efc0ca54eb.png',
+    iconTime: 'https://salt.tikicdn.com/ts/tmp/f0/c9/e4/8dc188accfca9db77b8748a5ee39f7d9.png',
+    iconNote: 'https://salt.tikicdn.com/ts/tmp/8c/b0/f8/9428ecfca38e90d7a5fef587e3f7719e.png',
+    iconCode:'https://salt.tikicdn.com/ts/tmp/be/72/e3/1abca5059ec7c36e999e6b7aa0645d5f.png'
+}
