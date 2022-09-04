@@ -1,0 +1,11 @@
+.disabledRow {
+    background-color: white ;
+    opacity: 0.5;
+  }
+  
+
+.disableRow{
+    background-color: #F5F5F5;
+    cursor: not-allowed;
+}
+
