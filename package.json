@@ -5,7 +5,7 @@
     "node": "17.x"
   },
   "private": true,
-  "homepage": ".",
+  "homepage": "https://namduong-tiki.github.io/sc-micro-warehouse/",
   "dependencies": {
     "@craco/craco": "^6.4.3",
     "@reduxjs/toolkit": "^1.8.1",
