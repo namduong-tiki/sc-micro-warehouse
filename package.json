@@ -7,46 +7,9 @@
   "private": true,
   "baseUrl": "http://namduong-tiki.github.io/sc-micro-warehouse/",
   "homepage": "/sc-micro-warehouse/",
-  "dependencies": {
-    "@craco/craco": "^6.4.3",
-    "@reduxjs/toolkit": "^1.8.1",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.5.0",
-    "@testing-library/user-event": "^7.2.1",
-    "@tikivn/sc-frontend-common": "^2.0.24-beta.2",
-    "@types/jest": "^24.9.1",
-    "@types/node": "^18.6.1",
-    "@types/react": "^18.0.15",
-    "@types/react-redux": "^7.1.23",
-    "antd": "^4.19.5",
-    "dayjs": "^1.11.0",
-    "gh-pages": "^4.0.0",
-    "less": "^4.1.2",
-    "lodash": "^4.17.21",
-    "mem": "^9.0.2",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-intl": "^5.24.8",
-    "react-redux": "^7.2.8",
-    "react-router": "5.2.0",
-    "react-router-dom": "5.2.0",
-    "react-scripts": "^5.0.1",
-    "styled-components": "^5.3.5",
-    "stylis-plugin-extra-scope": "^0.3.0",
-    "typescript": "~4.7.4",
-    "web-vitals": "^2.1.4"
-  },
+
   "scripts": {
-    "start": "PORT=3000 craco start",
-    "build:uat": "env-cmd -f .env.uat craco build",
-    "build:staging": "env-cmd -f .env.staging craco build",
-    "build:production": "env-cmd -f .env.production craco build",
-    "build": "craco build",
-    "test": "craco test",
-    "eject": "react-scripts eject",
-    "lint": "eslint -c .eslintrc.js src --max-warnings=0",
-    "postinstall": "husky install",
-    "deploy": "gh-pages -d dist"
+    "start": "node app"
   },
   "eslintConfig": {
     "extends": "react-app"
