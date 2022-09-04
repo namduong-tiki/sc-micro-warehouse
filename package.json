@@ -5,7 +5,7 @@
     "node": "17.x"
   },
   "private": true,
-  "homepage": "https://namduong-tiki.github.io/sc-micro-warehouse/",
+  "homepage": ".",
   "dependencies": {
     "@craco/craco": "^6.4.3",
     "@reduxjs/toolkit": "^1.8.1",
@@ -46,7 +46,7 @@
     "lint": "eslint -c .eslintrc.js src --max-warnings=0",
     "postinstall": "husky install",
     "predeploy": "npm run build:uat",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d dist"
   },
   "eslintConfig": {
     "extends": "react-app"
