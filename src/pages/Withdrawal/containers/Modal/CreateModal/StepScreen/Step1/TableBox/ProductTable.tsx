@@ -30,17 +30,17 @@ const ContentContainer = styled.div`
 `
 const StyledTable = styled(Table)`
     width: 49%;
-    &&& .ant-table {
+     .ant-table {
       .ant-table-container > .ant-table-body{
         height: 50vh;
       }
-    & .ant-table-thead > tr > th.ant-table-cell {
+     .ant-table-thead > tr > th.ant-table-cell {
         background-color: #D9D9D9;
     }
-    & .ant-table-thead > tr > th.ant-table-cell:nth-child(1)  {
+     .ant-table-thead > tr > th.ant-table-cell:nth-child(1)  {
         border-right: 0;
     }
-    & .ant-table-tbody > tr > td.ant-table-cell:nth-child(1) {
+    .ant-table-tbody > tr > td.ant-table-cell:nth-child(1) {
         border-right: 0;
     }
   }
@@ -205,7 +205,7 @@ const ActionTitle: React.FC<ActionTitleProps> = ({isSelected, action,data = []})
     return (
       <HeaderTitleContainer> 
         <Link1 onClick={() => action('all',data,'add')} style={{display:'block'}}>
-          {formatMessage({ id: 'bpor.select_all' })}
+          {formatMessage({ id: 'common.select_all' })}
         </Link1>
         <SubTitle1 size='13px'>
         ({data.length} {formatMessage({id:'bpor.product'})})
@@ -259,7 +259,7 @@ const ProductTable: React.FC<ProductTableProps> = ({data = {},isSelected,onChang
         total:data?.data?.length,
         showSizeChanger:true,
         onChange: (_page,pageSize) => setSelectedSize(pageSize),
-        showTotal: (total, range) => `${range[0]}-${range[1]}(${formatMessageHook({id:'Tổng cộng'})}: ${total})`,
+        showTotal: (total, range) => `${range[0]}-${range[1]}(${formatMessageHook({id:'bpor.sum.total'})}: ${total})`,
     }}
       />
 
@@ -277,7 +277,7 @@ const ProductTable: React.FC<ProductTableProps> = ({data = {},isSelected,onChang
       pagination={{ 
           pageSize: limit,
           total:data?.paging?.total,
-          showTotal: (total, range) => `${range[0]}-${range[1]}(${formatMessageHook({id:'Tổng cộng'})}: ${total})`,
+          showTotal: (total, range) => `${range[0]}-${range[1]}(${formatMessageHook({id:'bpor.sum.total'})}: ${total})`,
           onChange: (page,pageSize) => onChangeQuery('page',page,pageSize)
       }}
     />

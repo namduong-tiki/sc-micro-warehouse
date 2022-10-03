@@ -1,24 +1,26 @@
 import React, { useRef } from 'react';
-import styled, { css } from 'styled-components';
+import styled 
+// , { css } 
+from 'styled-components';
 import last from 'lodash/last'
 import { ArrowDownOutlined } from '@ant-design/icons';
 import { Cascader } from 'antd';
 import { useCategoryData } from './useCategoryData';
 
-const alwaysDisplayHorizontalScrollbar = css`
-  overflow-x: scroll;
+// const alwaysDisplayHorizontalScrollbar = css`
+//   overflow-x: scroll;
 
-  ::-webkit-scrollbar {
-    -webkit-appearance: none;
-    height: 6px;
-  }
+//   ::-webkit-scrollbar {
+//     -webkit-appearance: none;
+//     height: 6px;
+//   }
 
-  ::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: rgba(0, 0, 0, 0.5);
-    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
-  }
-`;
+//   ::-webkit-scrollbar-thumb {
+//     border-radius: 4px;
+//     background-color: rgba(0, 0, 0, 0.5);
+//     -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+//   }
+// `;
 
 const SIZE_HEIGHT_MAPPING:any = {
   small: '24px',
@@ -34,16 +36,16 @@ const SIZE_ARROW_MAPPING:any = {
 
 const CASCADER_OVERLAY_CLASS_NAME = 'category-cascader-overlay';
 
-const OverlayCascader = ({ cascaderRef, className, ...props }:any) => {
-  return (
-    <Cascader
-      ref={cascaderRef}
-      popupClassName={`${CASCADER_OVERLAY_CLASS_NAME} ${className}`}
-      className={className}
-      {...props}
-    />
-  );
-}
+// const OverlayCascader = ({ cascaderRef, className, ...props }:any) => {
+//   return (
+//     <Cascader
+//       ref={cascaderRef}
+//       popupClassName={`${CASCADER_OVERLAY_CLASS_NAME} ${className}`}
+//       className={className}
+//       {...props}
+//     />
+//   );
+// }
 
 const ArrowDown = styled(ArrowDownOutlined)``;
 
@@ -75,48 +77,48 @@ const Container = styled.div<Props>`
 //   }
 // `;
 
-const StyledCascader = styled(OverlayCascader)`
-  &&& {
-    &.ant-cascader-picker {
-      z-index: 98;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-    }
+// const StyledCascader = styled(OverlayCascader)`
+//   &&& {
+//     &.ant-cascader-picker {
+//       z-index: 98;
+//       position: absolute;
+//       top: 0;
+//       left: 0;
+//       width: 100%;
+//     }
 
-    &.ant-cascader-menus {
-      position: relative;
-      width: fit-content;
-      max-width: 660px;
-      ${alwaysDisplayHorizontalScrollbar};
-      .ant-cascader-menu {
-        min-width: 110px;
-      }
+//     &.ant-cascader-menus {
+//       position: relative;
+//       width: fit-content;
+//       max-width: 660px;
+//       ${alwaysDisplayHorizontalScrollbar};
+//       .ant-cascader-menu {
+//         min-width: 110px;
+//       }
 
-      &:before {
-        position: absolute;
-        z-index: 2;
-        display: ${({ loading }) => (loading ? 'flex' : 'none')};
-        justify-content: center;
-        align-items: center;
-        content: 'loading';
-        width: 100%;
-        height: -webkit-fill-available;
-        background: rgba(255, 255, 255, 0.7);
-      }
-    }
+//       &:before {
+//         position: absolute;
+//         z-index: 2;
+//         display: ${({ loading }) => (loading ? 'flex' : 'none')};
+//         justify-content: center;
+//         align-items: center;
+//         content: 'loading';
+//         width: 100%;
+//         height: -webkit-fill-available;
+//         background: rgba(255, 255, 255, 0.7);
+//       }
+//     }
 
-    @media only screen and (max-width: 992px) {
-      &.ant-cascader-menus{
-        max-width: 300px;
-        .ant-cascader-menu {
-          max-width: 300px;
-        }
-      }
-    }
-  }
-`;
+//     @media only screen and (max-width: 992px) {
+//       &.ant-cascader-menus{
+//         max-width: 300px;
+//         .ant-cascader-menu {
+//           max-width: 300px;
+//         }
+//       }
+//     }
+//   }
+// `;
 
 const CategoriesCascader = (props:any) => {
   
@@ -191,7 +193,7 @@ const CategoriesCascader = (props:any) => {
 
   return (
     <Container size={size}>
-      <StyledCascader
+      <Cascader
       style={{width:'100%'}}
         loading={loading}
         cascaderRef={cascaderRef}

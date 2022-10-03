@@ -56,26 +56,36 @@ const TitleTab = styled.span`
   line-height: 24px;
 `;
 
-const renderTitle = (tab: any, tabData: any,formatMessage:any) => {
+const renderTitle = (tab: any, tabData: any, formatMessage: any) => {
   switch (tab.value) {
     case TAB_NAME.DRAFT:
-      return `${formatMessage({id:tab.title})}${tabData?.draft ? ` (${tabData?.draft})` : ''}`;
+      return `${formatMessage({ id: tab.title })}${
+        tabData?.draft || tabData?.draft === 0 ? ` (${tabData?.draft})` : ''
+      }`;
     case TAB_NAME.PROCESSING:
-      return `${formatMessage({id:tab.title})}${tabData?.processing ? ` (${tabData?.processing})` : ''}`;
+      return `${formatMessage({ id: tab.title })}${
+        tabData?.processing || tabData?.processing === 0 ? ` (${tabData?.processing})` : ''
+      }`;
     case TAB_NAME.WAITING:
-      return `${formatMessage({id:tab.title})}${tabData?.waiting ? ` (${tabData?.waiting})` : ''}`;
+      return `${formatMessage({ id: tab.title })}${
+        tabData?.done || tabData?.done === 0 ? ` (${tabData?.done})` : ''
+      }`;
     case TAB_NAME.SUCCESSFULLY:
-      return `${formatMessage({id:tab.title})}${tabData?.completed ? ` (${tabData?.completed})` : ''}`;
-    case TAB_NAME.CANCELED:
-      return `${formatMessage({id:tab.title})}${tabData?.canceled ? ` (${tabData?.canceled})` : ''}`;
+      return `${formatMessage({ id: tab.title })}${
+        tabData?.completed || tabData?.completed === 0 ? ` (${tabData?.completed})` : ''
+      }`;
+    case TAB_NAME.CANCELLED:
+      return `${formatMessage({ id: tab.title })}${
+        tabData?.canceled || tabData?.canceled === 0 ? ` (${tabData?.canceled})` : ''
+      }`;
     default:
-      return formatMessage({id:tab.title});
+      return formatMessage({ id: tab.title });
   }
 };
 
 export default function Tab({}: IAppProps) {
   const { onTabChange, tab, tabData } = useTab();
-  const formatMessage = useFormatMessage()
+  const formatMessage = useFormatMessage();
   return (
     <>
       <StyledTabs
@@ -87,7 +97,7 @@ export default function Tab({}: IAppProps) {
         // animated={!isMobile}
       >
         {TABS.map((item) => {
-          const title = renderTitle(item, tabData,formatMessage);
+          const title = renderTitle(item, tabData, formatMessage);
           return <StyledTabs.TabPane key={item?.value} tab={<TitleTab>{title}</TitleTab>} />;
         })}
       </StyledTabs>

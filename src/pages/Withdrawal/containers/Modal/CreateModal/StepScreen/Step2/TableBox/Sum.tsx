@@ -35,6 +35,7 @@ interface SumWarehouseProps {
     let totalWeight = 0
     let isVisibleWeight = true
     const currentWarehouse = get(numberWithdrawalSelected,[warehouseCode],{})
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     for (const [_, value] of Object.entries(currentWarehouse)) {
       const product: any = value;
       const currentValue = product?.value;

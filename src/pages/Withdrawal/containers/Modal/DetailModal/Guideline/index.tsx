@@ -13,6 +13,7 @@ const StyledRow = styled.div`
   border-radius: 2px;
   display: flex;
   flex-direction: row;
+  margin-bottom:24px ;
 
 `
 const InformationIcon = styled(InfoCircleOutlined)`
@@ -30,13 +31,13 @@ const Guideline:React.FC = () => {
         </div>
         <div style={{flex:1}}>
           <Title1 style={{display:'block',marginBottom:6}}>
-            {formatMessage({id:'Hướng dẫn'})}
+            {formatMessage({id:'common.guideline'})}
           </Title1>
 
           <NormalText style={{display:'block'}}>
             <Text1 size='6px'>&#9679;</Text1>
             &ensp;
-            <Text0 style={{textDecoration:'underline'}}>{formatMessage({id:'Bước 1'})}</Text0>:
+            <Text0 style={{textDecoration:'underline'}}>{formatMessage({id:'common.step1'})}</Text0>:
             &nbsp;
             <FormatHtmlMessage id='bpor.title_detai_step1' />
             <LinkURL target="_blank" >
@@ -47,7 +48,7 @@ const Guideline:React.FC = () => {
           <NormalText style={{display:'block'}}>
             <Text1 size='6px'>&#9679;</Text1>
             &ensp;
-            <Text0 style={{textDecoration:'underline'}}>{formatMessage({id:'Bước 2'})}</Text0>:
+            <Text0 style={{textDecoration:'underline'}}>{formatMessage({id:'common.step2'})}</Text0>:
             &nbsp;
             <FormatHtmlMessage id='bpor.title_detai_step2' />
             &nbsp;

@@ -66,7 +66,7 @@ const Content: React.FC<Props> = ({ onClosePopup, value, onChangeInput }) => {
   return (
     <>
     <Title1 style={{fontSize:'14px'}}>
-      {formatMessage({id:'Ghi chú'})}
+      {formatMessage({id:'bpor.note'})}
     </Title1>
     <SizedBox height='6px'/>
       <Input.TextArea

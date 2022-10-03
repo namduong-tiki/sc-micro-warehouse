@@ -1,20 +1,19 @@
 import BadgeIcon from '@/components/BadgeIcon';
 import SizedBox from '@/components/SizedBox';
-import { EyeOutlined, ClockCircleOutlined, PlusOutlined, EditOutlined } from '@ant-design/icons';
+import {  ClockCircleOutlined, PlusOutlined, EditOutlined } from '@ant-design/icons';
 import { HeadTitle2, Link1, SubTitle1, Text1, Title1 } from '@/components/Text';
 import { LINK_CDN_IMAGE } from '@/constants/link';
 import { useFormatMessage } from '@/utils/locale';
 import dayjs from 'dayjs';
 import { Row, Tag } from 'antd';
-import React from 'react';
+import React, { useMemo } from 'react';
 import styled from 'styled-components';
-import PopupChooseDay from '@/components/PopupChooseDay';
 import PopupChooseWarehouse from '@/components/PopupChooseWarehouse';
 import PopupEditNote from '@/components/PopupEditNote';
 import PopupReferenceCode from '@/components/PopupReferenceCode';
 import { POP_UP } from '@/pages/Withdrawal/constants/popup';
 
-const { iconSeller, iconWarehouse, iconNote, iconCode, iconTime } = LINK_CDN_IMAGE;
+const {  iconWarehouse, iconNote, iconCode, iconTime } = LINK_CDN_IMAGE;
 
 const Container = styled.div`
   background-color: white;
@@ -29,12 +28,12 @@ const HeaderContainer = styled.div`
   padding: 0 24px;
 `;
 
-const ChooseTimeContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  flex: 1;
-`;
+// const ChooseTimeContainer = styled.div`
+//   display: flex;
+//   flex-direction: row;
+//   justify-content: flex-end;
+//   flex: 1;
+// `;
 
 const ContentContainer = styled.div`
   padding: 16px 12px;
@@ -51,32 +50,74 @@ interface Props {
   [any: string]: any;
 }
 
-const LeftColum: React.FC<Props> = ({ record, status = {}, warehouse = [], onSaveInput }) => {
+const LeftColum: React.FC<Props> = ({
+  record,
+  status = {},
+  onSaveInput,
+  listWarehouseInformation = [],
+}) => {
   const formatMessage = useFormatMessage();
   const {
     isDraft,
     isCancel,
-    isLiquidated,
+    // isLiquidated,
     isReadyToReturn,
-    isShow10day,
     isSuccess,
-    isWaitingConfirm,
-    isWaitingPreparing,
+    // isWaitingConfirm,
+    // isWaitingPreparing,
     onClosePopup,
     onShowPopup,
     popupName,
     setPopupName,
   } = status;
 
+  const warehouseCode = record?.warehouse_code;
+  const pickupWarehouseCode = record?.pickup_warehouse_code;
+
+  const pickupWarehouseInformation = useMemo(() => {
+    const item = listWarehouseInformation.find((i: any) => i?.code === pickupWarehouseCode) || {};
+    return item;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listWarehouseInformation.length, pickupWarehouseCode]);
+
+  const warehouseInformation = useMemo(() => {
+    const item = listWarehouseInformation.find((i: any) => i?.code === warehouseCode) || {};
+    return item;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listWarehouseInformation.length, warehouseCode]);
+
   if (isDraft) {
     return (
       <Container>
         <HeaderContainer>
-          <HeadTitle2>
-            {formatMessage({ id: 'Mã phiếu' })}: {record?.code}
-          </HeadTitle2>
+          <HeadTitle2>{formatMessage({ id: 'common.order_code' })} ({formatMessage({id:'Nháp'})})</HeadTitle2>
         </HeaderContainer>
         <ContentContainer>
+          <>
+            <SizedBox height="12px" />
+            <SubContentContainer>
+              <IconTitle icon={iconWarehouse} title={formatMessage({ id: 'bpor.init_warehouse' })} />
+              <SizedBox height="8px" />
+              <Title1>
+                {formatMessage({ id: 'bpor.warehouse' })}{' '}
+                {warehouseInformation &&
+                  warehouseInformation.code &&
+                  warehouseInformation.code.toUpperCase()}
+              </Title1>
+              <SubTitle1 style={{ display: 'block' }}>
+                <SubTitle1 style={{ textDecoration: 'underline' }}>
+                  {formatMessage({ id: 'common.address' })}
+                </SubTitle1>
+                : {warehouseInformation?.address}
+              </SubTitle1>
+              <SubTitle1 style={{ display: 'block' }}>
+                <SubTitle1 style={{ textDecoration: 'underline' }}>
+                  {formatMessage({ id: 'common.representative' })}
+                </SubTitle1>
+                : {warehouseInformation?.contact_withdrawal}
+              </SubTitle1>
+            </SubContentContainer>
+          </>
           <>
             <SizedBox height="12px" />
             <SubContentContainer>
@@ -92,34 +133,58 @@ const LeftColum: React.FC<Props> = ({ record, status = {}, warehouse = [], onSav
                 >
                   <IconTitle
                     icon={iconWarehouse}
-                    title={formatMessage({ id: 'Kho đến rút hàng' })}
+                    title={formatMessage({ id: 'bpor.warehouse_withdrawal' })}
                   />
-                  <Link1 size="14px" onClick={() => onShowPopup(POP_UP.WAREHOUSE)}>
+                  <Link1 size="14px" onClick={() => onShowPopup(POP_UP.PICKUP_WAREHOUSE)}>
                     {formatMessage({ id: 'Thay đổi' })}
                   </Link1>
                 </Row>
                 <PopupChooseWarehouse
-                  values={warehouse}
+                  values={listWarehouseInformation}
                   onClosePopup={onClosePopup}
-                  isShowPopup={popupName === POP_UP.WAREHOUSE}
+                  isShowPopup={popupName === POP_UP.PICKUP_WAREHOUSE}
                   setIsShowPopup={setPopupName}
-                  value={record?.warehouse_code}
-                  onChangeInput={(value: any) => onSaveInput({warehouseCode:value})}
+                  value={pickupWarehouseCode}
+                  onChangeInput={(value: any) => onSaveInput({ pickupWarehouseCode: value })}
                 />
               </Row>
 
               <SizedBox height="8px" />
-              <Title1>
-                {formatMessage({ id: 'Kho' })}{' '}
-                {record?.warehouse_code && record?.warehouse_code.toUpperCase()}
-              </Title1>
+              {pickupWarehouseCode ? (
+                <Title1>
+                  {formatMessage({ id: 'bpor.warehouse' })}{' '}
+                  {pickupWarehouseInformation &&
+                    pickupWarehouseInformation.code &&
+                    pickupWarehouseInformation.code.toUpperCase()}
+                </Title1>
+              ) : (
+                <span style={{ color: 'red' }}>
+                  {formatMessage({ id: 'bpor.warehouse_withdrawal_placeholder' })}
+                </span>
+              )}
+              {pickupWarehouseCode && (
+                <>
+                  <SubTitle1 style={{ display: 'block' }}>
+                    <SubTitle1 style={{ textDecoration: 'underline' }}>
+                      {formatMessage({ id: 'common.address' })}
+                    </SubTitle1>
+                    : {pickupWarehouseInformation?.address}
+                  </SubTitle1>
+                  <SubTitle1 style={{ display: 'block' }}>
+                    <SubTitle1 style={{ textDecoration: 'underline' }}>
+                      {formatMessage({ id: 'common.representative' })}
+                    </SubTitle1>
+                    : {pickupWarehouseInformation?.contact_withdrawal}
+                  </SubTitle1>
+                </>
+              )}
             </SubContentContainer>
           </>
 
           <>
             <SizedBox height="12px" />
             <SubContentContainer>
-              <IconTitle icon={iconCode} title={formatMessage({ id: 'Mã phiếu rút nhà bán' })} />
+              <IconTitle icon={iconCode} title={formatMessage({ id: 'bpor.reference_code' })} />
               <SizedBox height="8px" />
               {record?.reference_code ? (
                 <SubTitle1 style={{ display: 'block' }}>
@@ -131,7 +196,7 @@ const LeftColum: React.FC<Props> = ({ record, status = {}, warehouse = [], onSav
               ) : (
                 <Link1 size="14px" onClick={() => onShowPopup(POP_UP.REFERENCE_CODE)}>
                   <PlusOutlined style={{ marginRight: 5 }} />{' '}
-                  {formatMessage({ id: 'Thêm mã phiếu' })}
+                  {formatMessage({ id: 'bpor.input_code' })}
                 </Link1>
               )}
               <PopupReferenceCode
@@ -139,7 +204,7 @@ const LeftColum: React.FC<Props> = ({ record, status = {}, warehouse = [], onSav
                 isShowPopup={popupName === POP_UP.REFERENCE_CODE}
                 setIsShowPopup={setPopupName}
                 value={record?.reference_code}
-                onChangeInput={(value: any) => onSaveInput({referenceCode:value})}
+                onChangeInput={(value: any) => onSaveInput({ referenceCode: value })}
               />{' '}
             </SubContentContainer>
           </>
@@ -147,7 +212,7 @@ const LeftColum: React.FC<Props> = ({ record, status = {}, warehouse = [], onSav
           <>
             <SizedBox height="12px" />
             <SubContentContainer>
-              <IconTitle icon={iconNote} title={formatMessage({ id: 'Ghi chú' })} />
+              <IconTitle icon={iconNote} title={formatMessage({ id: 'bpor.note' })} />
               <SizedBox height="8px" />
               {record?.note ? (
                 <SubTitle1 style={{ display: 'block' }}>
@@ -167,7 +232,7 @@ const LeftColum: React.FC<Props> = ({ record, status = {}, warehouse = [], onSav
                 isShowPopup={popupName === POP_UP.NOTE}
                 setIsShowPopup={setPopupName}
                 value={record?.note}
-                onChangeInput={(value: any) => onSaveInput({note:value})}
+                onChangeInput={(value: any) => onSaveInput({ note: value })}
               />
             </SubContentContainer>
           </>
@@ -175,65 +240,69 @@ const LeftColum: React.FC<Props> = ({ record, status = {}, warehouse = [], onSav
       </Container>
     );
   }
+  const slaPickupDate = record?.sla_pickup ? dayjs(record?.sla_pickup).format('DD/MM/YYYY') : ''
+  const slaPickupRemainDays = record?.sla_pickup_remain_days
 
   return (
     <Container>
       <HeaderContainer>
         <HeadTitle2>
-          {formatMessage({ id: 'Mã phiếu' })}: {record?.code}
+          {formatMessage({ id: 'common.order_code' })}: {record?.code ? record?.code : 'Đang xử lý'}
         </HeadTitle2>
       </HeaderContainer>
       <ContentContainer>
         {isReadyToReturn && (
-          <>
-            <TimeContainer>
-              <Row style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                <Row
-                  style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flex: 1 }}
-                >
-                  <img alt="" src={iconTime} style={{ width: 25, height: 25 }} />
-                  <SizedBox width="5px" />
-                  <Text1 size="14px">{formatMessage({ id: 'Thời gian rút hàng' })}</Text1>
-                  <ChooseTimeContainer>
-                    <SubTitle1>
-                      <a onClick={() => onShowPopup(POP_UP.LIMIT_DAY)}>{formatMessage({ id: 'Hẹn ngày lấy hàng' })}</a>
-                    </SubTitle1>
-                  </ChooseTimeContainer>
-                  <PopupChooseDay
-                    onClosePopup={onClosePopup}
-                    isShowPopup={popupName === POP_UP.LIMIT_DAY}
-                    setIsShowPopup={setPopupName}
-                    value={record?.reference_code}
-                    onChangeInput={(value: any) => {}}
-                  />
-                </Row>
-              </Row>
-              <SizedBox height="4px" />
-              <Tag style={{ borderRadius: 10, backgroundColor: '#ffffff', borderColor: '#91d5ff' }}>
-                <Text1 size="14px" color="#1890ff">
-                  {' '}
-                  {formatMessage({ id: 'Thời gian thanh lý' })}:{' '}
-                  {record?.created_at &&
-                    dayjs.unix(record.created_at).format('DD/MM/YYYY - HH:mm:ss')}{' '}
-                </Text1>
-              </Tag>
-              {isShow10day && (
-                <>
-                  <SizedBox height="6px" />
-                  <Tag color={'error'} style={{ borderRadius: 10 }}>
-                    <ClockCircleOutlined /> {formatMessage({ id: 'Còn lại 10 ngày' })}
-                  </Tag>
-                  <SubTitle1>{formatMessage({ id: 'nữa hàng sẽ bị thanh lý' })}</SubTitle1>
-                  <SubTitle1 style={{ display: 'block' }} color="#BFBFBF">
-                    ({formatMessage({ id: 'Đã gửi yêu cầu gia hạn' })})
+        <>
+          <TimeContainer>
+            <Row style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+              <Row style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+                <img alt="" src={iconTime} style={{ width: 25, height: 25 }} />
+                <SizedBox width="5px" />
+                <Text1 size="14px">{formatMessage({ id: 'bpor.withdraw_time' })}</Text1>
+                {/* <ChooseTimeContainer>
+                  <SubTitle1>
+                    <a onClick={() => onShowPopup(POP_UP.LIMIT_DAY)}>
+                      {formatMessage({ id: 'bpor_choose_pickup_date' })}
+                    </a>
                   </SubTitle1>
-                </>
-              )}
+                </ChooseTimeContainer>
+                <PopupChooseDay
+                  onClosePopup={onClosePopup}
+                  isShowPopup={popupName === POP_UP.LIMIT_DAY}
+                  setIsShowPopup={setPopupName}
+                  value={record?.reference_code}
+                  onChangeInput={() => {}}
+                /> */}
+              </Row>
+            </Row>
+            <SizedBox height="4px" />
+            <Tag style={{ borderRadius: 10, backgroundColor: '#ffffff', borderColor: '#91d5ff' }}>
+              <Text1 size="14px" color="#1890ff">
+                {' '}
+                {formatMessage({ id: 'bpor.liquidated_time' })}:{' '}
+                {/* {record?.created_at &&
+                    dayjs.unix(record.created_at).format('DD/MM/YYYY - HH:mm:ss')}{' '} */}
+                {slaPickupDate}
+              </Text1>
+            </Tag>
+        {!!(slaPickupRemainDays) && ( 
+            <>
+              <SizedBox height="6px" />
+              <Tag color={'error'} style={{ borderRadius: 10 }}>
+                {/* <ClockCircleOutlined /> {formatMessage({ id: 'Còn lại missing ngày' })} */}
+                <ClockCircleOutlined /> Còn lại {slaPickupRemainDays} ngày
+              </Tag>
+              <SubTitle1>{formatMessage({ id: 'bpor.sub_text_liquidated' })}</SubTitle1>
+              {/* <SubTitle1 style={{ display: 'block' }} color="#BFBFBF">
+                ({formatMessage({ id: 'Đã gửi yêu cầu gia hạn' })})
+              </SubTitle1> */}
+            </>
+            )}
 
-              <SizedBox height="5px" />
-            </TimeContainer>
-          </>
-        )}
+            <SizedBox height="5px" />
+          </TimeContainer>
+        </>
+       )} 
 
         {isSuccess && (
           <>
@@ -244,16 +313,16 @@ const LeftColum: React.FC<Props> = ({ record, status = {}, warehouse = [], onSav
                 >
                   <img alt="" src={iconTime} style={{ width: 25, height: 25 }} />
                   <SizedBox width="5px" />
-                  <Text1 size="14px">{formatMessage({ id: 'Thời gian rút hàng' })}</Text1>
+                  <Text1 size="14px">{formatMessage({ id: 'bpor.withdraw_time' })}</Text1>
                 </Row>
               </Row>
               <SizedBox height="4px" />
               <Tag style={{ borderRadius: 10, backgroundColor: '#ffffff', borderColor: '#91d5ff' }}>
                 <Text1 size="14px" color="#1890ff">
                   {' '}
-                  {formatMessage({ id: 'Hoàn thành lúc' })}:{' '}
-                  {record?.created_at &&
-                    dayjs.unix(record.created_at).format('DD/MM/YYYY - HH:mm:ss')}{' '}
+                  {formatMessage({ id: 'common.finished_at' })}:{' '}
+                  {record?.updated_at &&
+                    dayjs.unix(record.updated_at).format('DD/MM/YYYY - HH:mm:ss')}{' '}
                 </Text1>
               </Tag>
               <SizedBox height="5px" />
@@ -268,95 +337,141 @@ const LeftColum: React.FC<Props> = ({ record, status = {}, warehouse = [], onSav
               <IconTitle icon={iconNote} title={formatMessage({ id: 'Lý do thất bại' })} />
               <SizedBox height="8px" />
               <SubTitle1 style={{ textDecoration: 'underline' }}>
-                {formatMessage({ id: 'Lý do' })}
+                {formatMessage({ id: 'common.reason' })}
               </SubTitle1>
-              : {'record?.reason'}
+              : {record?.canceled_reason_text}
             </SubContentContainer>
           </>
         )}
 
-        {(!isWaitingConfirm ||
+        {/* {(!isWaitingConfirm ||
           isWaitingPreparing ||
           isReadyToReturn ||
           isCancel ||
-          isLiquidated) && (
-          <>
-            <SizedBox height="12px" />
-            <SubContentContainer>
-              <IconTitle icon={iconWarehouse} title={formatMessage({ id: 'Kho đến rút hàng' })} />
-              <SizedBox height="8px" />
+          isLiquidated) && ( */}
+        <>
+          <SizedBox height="12px" />
+          <SubContentContainer>
+            <IconTitle icon={iconWarehouse} title={formatMessage({ id: 'bpor.init_warehouse' })} />
+            <SizedBox height="8px" />
+            <Title1>
+              {formatMessage({ id: 'bpor.warehouse' })}{' '}
+              {warehouseInformation &&
+                warehouseInformation.code &&
+                warehouseInformation.code.toUpperCase()}
+            </Title1>
+            <SubTitle1 style={{ display: 'block' }}>
+              <SubTitle1 style={{ textDecoration: 'underline' }}>
+                {formatMessage({ id: 'common.address' })}
+              </SubTitle1>
+              : {warehouseInformation?.address}
+            </SubTitle1>
+            <SubTitle1 style={{ display: 'block' }}>
+              <SubTitle1 style={{ textDecoration: 'underline' }}>
+                {formatMessage({ id: 'common.representative' })}
+              </SubTitle1>
+              : {warehouseInformation?.contact_withdrawal}
+            </SubTitle1>
+          </SubContentContainer>
+        </>
+        <>
+          <SizedBox height="12px" />
+          <SubContentContainer>
+            <Row style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+              <Row
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  flex: 1,
+                  justifyContent: 'space-between',
+                }}
+              >
+                <IconTitle icon={iconWarehouse} title={formatMessage({ id: 'bpor.warehouse_withdrawal' })} />
+              </Row>
+            </Row>
+
+            <SizedBox height="8px" />
+            {pickupWarehouseCode ? (
               <Title1>
-                {formatMessage({ id: 'Kho' })}{' '}
-                {record?.warehouse_code && record?.warehouse_code.toUpperCase()}
+                {formatMessage({ id: 'bpor.warehouse' })}{' '}
+                {pickupWarehouseInformation &&
+                  pickupWarehouseInformation.code &&
+                  pickupWarehouseInformation.code.toUpperCase()}
               </Title1>
-              <SubTitle1 style={{ display: 'block' }}>
-                <SubTitle1 style={{ textDecoration: 'underline' }}>
-                  {formatMessage({ id: 'Địa chỉ' })}
+            ) : (
+              <span style={{ color: 'red' }}>
+                {formatMessage({ id: 'bpor.warehouse_withdrawal_placeholder' })}
+              </span>
+            )}
+            {pickupWarehouseCode && (
+              <>
+                <SubTitle1 style={{ display: 'block' }}>
+                  <SubTitle1 style={{ textDecoration: 'underline' }}>
+                    {formatMessage({ id: 'common.address' })}
+                  </SubTitle1>
+                  : {pickupWarehouseInformation?.address}
                 </SubTitle1>
-                : {'addressGet'}
-              </SubTitle1>
-              <SubTitle1 style={{ display: 'block' }}>
-                <SubTitle1 style={{ textDecoration: 'underline' }}>
-                  {formatMessage({ id: 'Nguòi đại diện' })}
+                <SubTitle1 style={{ display: 'block' }}>
+                  <SubTitle1 style={{ textDecoration: 'underline' }}>
+                    {formatMessage({ id: 'common.representative' })}
+                  </SubTitle1>
+                  : {pickupWarehouseInformation?.contact_withdrawal}
                 </SubTitle1>
-                : {'contactGet'}
+              </>
+            )}
+          </SubContentContainer>
+        </>
+
+        {/* )} */}
+
+        {/* {(!isWaitingConfirm ||
+          isWaitingPreparing ||
+          isReadyToReturn ||
+          isCancel ||
+          isLiquidated) && ( */}
+        {/* <>
+          <SizedBox height="12px" />
+          <SubContentContainer>
+            <IconTitle
+              icon={iconSeller}
+              title={formatMessage({ id: 'Thông tin người rút hàng' })}
+            />
+            <SizedBox height="8px" />
+            <SubTitle1 style={{ display: 'block' }}>
+              <SubTitle1 style={{ textDecoration: 'underline' }}>
+                {formatMessage({ id: 'Người uỷ quyền' })}
               </SubTitle1>
+              : {'missing'}
+            </SubTitle1>
+            <SubTitle1 style={{ display: 'block' }}>
+              <a>
+                <EyeOutlined /> {formatMessage({ id: 'Xem chi tiết' })}
+              </a>
+            </SubTitle1>
+          </SubContentContainer>
+        </> */}
+        {/* )} */}
+        {record?.reference_code && (
+          <>
+            <SizedBox height="12px" />
+            <SubContentContainer>
+              <IconTitle icon={iconCode} title={formatMessage({ id: 'bpor.code_seller' })} />
+              <SizedBox height="8px" />
+              {record?.reference_code && (
+                <SubTitle1 style={{ display: 'block' }}>{record?.reference_code} </SubTitle1>
+              )}
             </SubContentContainer>
           </>
         )}
 
-        {(!isWaitingConfirm ||
-          isWaitingPreparing ||
-          isReadyToReturn ||
-          isCancel ||
-          isLiquidated) && (
+        {record?.note && (
           <>
             <SizedBox height="12px" />
             <SubContentContainer>
-              <IconTitle
-                icon={iconSeller}
-                title={formatMessage({ id: 'Thông tin người rút hàng' })}
-              />
+              <IconTitle icon={iconNote} title={formatMessage({ id: 'bpor.note' })} />
               <SizedBox height="8px" />
-              <SubTitle1 style={{ display: 'block' }}>
-                <SubTitle1 style={{ textDecoration: 'underline' }}>
-                  {formatMessage({ id: 'Người uỷ quyền' })}
-                </SubTitle1>
-                : {'addressGet'}
-              </SubTitle1>
-              <SubTitle1 style={{ display: 'block' }}>
-                <a>
-                  <EyeOutlined /> {formatMessage({ id: 'Xem chi tiết' })}
-                </a>
-              </SubTitle1>
-            </SubContentContainer>
-          </>
-        )}
-        {(!isWaitingConfirm ||
-          isWaitingPreparing ||
-          isReadyToReturn ||
-          isCancel ||
-          isLiquidated) && (
-          <>
-            <SizedBox height="12px" />
-            <SubContentContainer>
-              <IconTitle icon={iconCode} title={formatMessage({ id: 'Mã tham chiếu' })} />
-              <SizedBox height="8px" />
-              <SubTitle1 style={{ display: 'block' }}>Ma tham chieu</SubTitle1>
-            </SubContentContainer>
-          </>
-        )}
-        {(!isWaitingConfirm ||
-          isWaitingPreparing ||
-          isReadyToReturn ||
-          isCancel ||
-          isLiquidated) && (
-          <>
-            <SizedBox height="12px" />
-            <SubContentContainer>
-              <IconTitle icon={iconNote} title={formatMessage({ id: 'Ghi chú' })} />
-              <SizedBox height="8px" />
-              <SubTitle1 style={{ display: 'block' }}>note</SubTitle1>
+              {record?.note && <SubTitle1 style={{ display: 'block' }}>{record?.note} </SubTitle1>}
             </SubContentContainer>
           </>
         )}

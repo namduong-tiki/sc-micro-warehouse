@@ -10,6 +10,7 @@ const Container = styled.div`
 `
 const Flex1= styled.div`
     flex:1;
+    overflow-x:scroll ;
 `
 
 interface TableBoxProps {

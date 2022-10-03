@@ -34,11 +34,10 @@ const useCreateContext = () => {
 
   const [finishModalData,setFinishModalData] = useState()
 
-    const { createModalData, setCreateModalData, query, setQuery } = useContext(AppContext)
+    const { createModalData, setCreateModalData, query } = useContext(AppContext)
 
     const onCloseCreateModal = () => {
         setCreateModalData({ isVisible: false })
-        setQuery({...query,selectedId: null  })
     }
 
     return {

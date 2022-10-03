@@ -1,16 +1,20 @@
-import { Row,Col } from 'antd'
 import styled from 'styled-components'
 import {InfoCircleOutlined} from '@ant-design/icons'
 import React from 'react'
 import { Text1,NormalText } from '@/components/Text';
 import { FormatHtmlMessage } from '@/utils/locale';
 
-const StyledRow = styled(Row)`
+const StyledRow = styled.div`
+  display: flex ;
+  flex-direction: row ;
   background-color: #E6F7FF;
   border: 1px solid #91D5FF;
-  padding: 16px 24px;
+  padding: 12px 16px;
   border-radius: 2px;
-
+`
+const Col = styled.div`
+  display: flex ;
+  flex-direction: column ;
 `
 const InformationIcon = styled(InfoCircleOutlined)`
   color: #1890FF;
@@ -19,11 +23,12 @@ const InformationIcon = styled(InfoCircleOutlined)`
 
 const Guideline = () => {
     return(
-      <StyledRow gutter={15} style={{marginLeft:0,marginRight:0}}>
-        <Col>
+      <StyledRow style={{marginLeft:0,marginRight:0}}>
+        <Col style={{marginRight:10, marginTop:5}}>
           <InformationIcon />
         </Col>
-        <Col>
+        
+        <Col >
           <div style={{display:'flex',flexDirection:'row',alignItems:'center'}}>
             <Text1 size='6px'>&#9679;</Text1>
             &ensp;

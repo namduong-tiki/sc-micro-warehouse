@@ -16,7 +16,7 @@ const History: React.FC<Props> = ({ histories }) => {
   const isVietSub = localStorage.getItem('umi_locale') === 'vi-VN';
   return (
     <>
-      <HeadTitle2>{formatMessage({ id: 'Lịch sử phiếu rút hàng' })}</HeadTitle2>
+      <HeadTitle2>{formatMessage({ id: 'bpor.history' })}</HeadTitle2>
       <SizedBox height="5px" />
 
       <Steps progressDot current={1} direction="vertical">

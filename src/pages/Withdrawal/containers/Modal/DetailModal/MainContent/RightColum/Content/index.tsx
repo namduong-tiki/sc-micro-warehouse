@@ -10,11 +10,11 @@ const ContentContainer = styled.div`
   padding: 24px;
 `;
 const StyledTable = styled(Table)`
-  &&& .ant-table {
-    & .ant-table-thead > tr > th.ant-table-cell {
+   .ant-table {
+     .ant-table-thead > tr > th.ant-table-cell {
       background-color: #f5f5f5;
     }
-    & .ant-table-tbody > tr:nth-child(1) td {
+     .ant-table-tbody > tr:nth-child(1) td {
       background-color: #e6f7ff;
     }
   }
@@ -44,11 +44,11 @@ const Content: React.FC<Props> = ({
     const item = {
       total: itemsNonDraft.length,
       totalUnit,
+      product_sku:itemsNonDraft.length
     };
 
     return [item, ...itemsNonDraft];
   }, [itemsNonDraft]);
-
   return (
     <ContentContainer>
       {isDraft ? (
@@ -66,8 +66,9 @@ const Content: React.FC<Props> = ({
         <>
           <StyledTable
             dataSource={finalItems}
-            columns={ProductColum({ status }) as ColumnsType<any>}
+            columns={ProductColum({ status:record?.status }) as ColumnsType<any>}
             bordered
+            id='product_sku'
             rowKey="product_sku"
             pagination={false}
           />

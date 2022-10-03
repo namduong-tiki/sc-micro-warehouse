@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { isValidScope } from '@/utils';
 import React from 'react';
 import { Route as RouteComponent } from 'react-router-dom';
@@ -15,16 +17,19 @@ interface AuthorizedRouteProps {
 }
 
 const AuthorizedRoute: React.FC<AuthorizedRouteProps> = ({
-  permissions,
   path,
   authority,
+  permissions,
   component,
   messages,
 }) => {
   const Component = component;
-  if (!isValidScope(permissions, authority)) {
-    return <Forbidden />;
-  }
+  console.log('permissions',permissions)
+  console.log('authority',authority)
+
+  // if (!isValidScope('permissions', authority)) {
+  //   return <Forbidden />;
+  // }
 
   if (isUndefined(messages)) {
     return (

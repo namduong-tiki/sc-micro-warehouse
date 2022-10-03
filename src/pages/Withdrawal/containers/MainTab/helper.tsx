@@ -2,7 +2,6 @@ import { NormalText, Text0 } from '@/components/Text';
 import { formatMessage } from '@/utils/locale';
 import { Checkbox } from 'antd';
 import dayjs from 'dayjs';
-import { LIST_STATUS_TAB_DRAFT } from '../../constants/status';
 import Action from './Action';
 import Code from './Code';
 import Note from './Note';
@@ -32,8 +31,8 @@ export const renderColumns = ({ selected, onSelect, isAllSelected, isIndetermina
       ),
     },
     {
-      title: () => <Text0 fontWeight="600">{formatMessage({ id: 'Mã phiếu rút' })}</Text0>,
-      width: '14%',
+      title: () => <Text0 fontWeight="600">{formatMessage({ id: 'bpor.code' })}</Text0>,
+      width: '16%',
       dataIndex: 'name',
       render: (_: any, record: any) => <Code record={record} />,
     },
@@ -41,11 +40,11 @@ export const renderColumns = ({ selected, onSelect, isAllSelected, isIndetermina
       title: () => (
         <>
           <Text0 style={{ display: 'block' }} fontWeight="600">
-            {formatMessage({ id: 'Loại BPOR/Lý do' })}
+            {formatMessage({ id: 'bpor.type/reason' })}
           </Text0>
         </>
       ),
-      width: '14%',
+      width: '13%',
       key: 'sl',
       render: (_: any, record: any) => <TypeAndReason record={record} />,
     },
@@ -53,11 +52,11 @@ export const renderColumns = ({ selected, onSelect, isAllSelected, isIndetermina
       title: () => (
         <>
           <Text0 style={{ display: 'block' }} fontWeight="600">
-            {formatMessage({ id: 'Trạng thái' })}
+            {formatMessage({ id: 'bpor.status' })}
           </Text0>
         </>
       ),
-      width: '17%',
+      width: '16%',
       key: 'sl',
       render: (_: any, record: any) => <Status record={record} />,
     },
@@ -65,10 +64,10 @@ export const renderColumns = ({ selected, onSelect, isAllSelected, isIndetermina
       title: () => (
         <>
           <Text0 style={{ display: 'block' }} fontWeight="600">
-            {formatMessage({ id: 'Kho hàng' })}/
+            {formatMessage({ id: 'bpor.warehouseCamel' })}/
           </Text0>
           <Text0 style={{ display: 'block' }} fontWeight="600">
-            {formatMessage({ id: 'Số lượng' })}
+            {formatMessage({ id: 'bpor.number' })}
           </Text0>
         </>
       ),
@@ -76,13 +75,13 @@ export const renderColumns = ({ selected, onSelect, isAllSelected, isIndetermina
       render: (_: any, record: any) => <Warehouse record={record} />,
     },
     {
-      title: () => <Text0 fontWeight="600">{formatMessage({ id: 'Ghi chú' })}</Text0>,
-      width: '14%',
+      title: () => <Text0 fontWeight="600">{formatMessage({ id: 'bpor.note' })}</Text0>,
+      width: '13%',
       dataIndex: 'name',
       render: (_: any, record: any) => <Note record={record} />,
     },
     {
-      title: () => <Text0 fontWeight="600">{formatMessage({ id: 'Lần cập nhật cuối' })}</Text0>,
+      title: () => <Text0 fontWeight="600">{formatMessage({ id: 'bpor.last_update' })}</Text0>,
       width: '9%',
       dataIndex: 'name',
       render: (_: any, record: any) => (
@@ -92,15 +91,11 @@ export const renderColumns = ({ selected, onSelect, isAllSelected, isIndetermina
       ),
     },
     {
-      title: () => <Text0 fontWeight="600">{formatMessage({ id: 'Thao tác' })}</Text0>,
-      width: '13%',
+      title: () => <Text0 fontWeight="600">{formatMessage({ id: 'bpor.manipulation' })}</Text0>,
+      width: '14%',
       dataIndex: 'name',
       render: (_: any, record: any) => <Action record={record} />,
     },
   ];
 };
 
-export const checkIsDraftBPOR = (status: string) => {
-  const arrDraft = LIST_STATUS_TAB_DRAFT.map((i) => i?.key);
-  return arrDraft.includes(status);
-};

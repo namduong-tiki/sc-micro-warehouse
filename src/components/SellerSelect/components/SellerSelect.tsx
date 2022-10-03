@@ -4,22 +4,23 @@ import React from 'react';
 import { useCanSelectSeller, useSellers } from '../hooks';
 
 interface SellerSelectProps extends SelectProps {
-  sellerId: string | number | undefined;
+  sellerId: string | number;
   onSelect: (sellerId: number | undefined) => void;
 }
 
-const SellerSelect: React.FC<SellerSelectProps> = ({ sellerId = '', onSelect, ...props }) => {
+const SellerSelect: React.FC<SellerSelectProps> = ({ sellerId, onSelect, ...props }) => {
   const { sellers, fetching, onSearch } = useSellers(sellerId);
   const canSelectSeller = useCanSelectSeller();
 
-  const onSelectSeller = (sellerId: number | undefined) => {
-    onSelect(sellerId);
+  const onSelectSeller = (id: number | undefined) => {
+    onSelect(id);
   };
 
   if (!canSelectSeller) return null;
+  const value = sellerId && Number(sellerId);
   return (
     <Select
-      value={sellerId !== '' ? sellerId : undefined}
+      value={value}
       placeholder={formatMessage({ id: 'input.please-select-seller' })}
       onChange={onSelectSeller}
       showSearch

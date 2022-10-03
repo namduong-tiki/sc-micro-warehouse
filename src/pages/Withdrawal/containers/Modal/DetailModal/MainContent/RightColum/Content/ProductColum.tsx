@@ -7,6 +7,7 @@ import { FALLBACK_IMAGE } from '@/utils/image';
 import HoverText from '@/components/HoverText';
 import UnderlineText from '@/components/UnderlineText';
 import SizedBox from '@/components/SizedBox';
+import { useQuantityHook } from '@/pages/Withdrawal/hook/statusHook';
 
 const ImageContainer = styled.div`
   display: flex;
@@ -20,7 +21,7 @@ const ImageContainer = styled.div`
 export const ProductColum = ({ status }: any) => {
   return [
     {
-      title: () => <Text0 fontWeight="600">{formatMessage({ id: 'STT' })}</Text0>,
+      title: () => <Text0 fontWeight="600">{formatMessage({ id: 'common.number' })}</Text0>,
       dataIndex: 'stt',
       with: '7%',
       align: 'center',
@@ -31,7 +32,7 @@ export const ProductColum = ({ status }: any) => {
       },
     },
     {
-      title: () => <Text0 fontWeight="600">{formatMessage({ id: 'Sản phẩm' })}</Text0>,
+      title: () => <Text0 fontWeight="600">{formatMessage({ id: 'bpor.product' })}</Text0>,
       width: '60%',
       dataIndex: 'name',
       key: 'name',
@@ -39,39 +40,38 @@ export const ProductColum = ({ status }: any) => {
         if (record?.total)
           return (
             <Text0>
-              {formatMessage({ id: 'Tổng cộng' })}: {record?.total}{' '}
-              {formatMessage({ id: 'sản phẩm' })}
+              {formatMessage({ id: 'bpor.sum.total' })}: {record?.total}{' '}
+              {formatMessage({ id: 'bpor.sum.product' })}
             </Text0>
           );
-        return(
-        <Product record={record} />);
+        return <Product record={record} />;
       },
     },
     {
       title: () => (
         <>
           <Text0 style={{ display: 'block' }} fontWeight="600">
-            {formatMessage({ id: 'Số lượng' })}
+            {formatMessage({ id: 'bpor.number' })}
           </Text0>
         </>
       ),
       width: '22%',
       key: 'sl',
       render: (_: any, record: any) => {
-        if (record?.total) return (
-          <Text0>
-          {formatMessage({ id: 'Số lượng' })}: {record?.totalUnit}
-        </Text0>
-        );
-        return(
-        <Quantity record={record} status={status} />);
+        if (record?.total)
+          return (
+            <Text0>
+              {formatMessage({ id: 'bpor.number' })}: {record?.totalUnit}
+            </Text0>
+          );
+        return <Quantity record={record} status={status} />;
       },
     },
     {
       title: () => (
         <>
           <Text0 style={{ display: 'block' }} fontWeight="600">
-            {formatMessage({ id: 'Ghi chú' })}
+            {formatMessage({ id: 'bpor.note' })}
           </Text0>
         </>
       ),
@@ -105,7 +105,7 @@ const Note = ({ record }: any) => {
 };
 
 const Product = ({ record }: any) => {
-  const formatMessageHook = useFormatMessage()
+  const formatMessageHook = useFormatMessage();
   return (
     <ProductContainer>
       <ImageContainer>
@@ -117,38 +117,60 @@ const Product = ({ record }: any) => {
         </HoverText>
         <SubTitle1>
           SKU: {record?.product_sku}
-          {` - ${formatMessageHook({ id: 'bpor.order_code' })}: ${record?.product_unit} `}
+          {record?.product_unit &&
+            ` - ${formatMessageHook({ id: 'bpor.order_code' })}: ${record?.product_unit} `}
         </SubTitle1>
       </ContentContainer>
     </ProductContainer>
   );
 };
 
-const Quantity = ({ record, status = {} }: any) => {
-  const { isSuccess, isLiquidated } = status;
-  const expectedQty = record?.expected_qty || 0;
-  const actualQty = record?.actualQty || 0;
-  // const rejectedQuantity = record?.rejected_quantity || 0
-  const diff = expectedQty - actualQty;
+const Quantity = ({ record, status }: any) => {
+  const {
+    isCancel,
+    expectedQty,
+    actualQty,
+    diffQty,
+    liquidatedQty,
+    isShowDeviant,
+    isShowEnable,
+    estimatedQty,
+    isShowActualQty,
+    isShowLiquidated,
+  } = useQuantityHook(record, status);
+  if (isCancel) {
+    return <UnderlineText title={formatMessage({ id: 'common.request' })} value={expectedQty} />;
+  }
   return (
     <>
-      <UnderlineText title={formatMessage({ id: 'Yêu cầu' })} value={expectedQty} />
-      <SizedBox height="5px" />
-      <UnderlineText title={formatMessage({ id: 'Có thể xuất' })} value={actualQty} />
-      <>
-        <SizedBox height="5px" />
-        <UnderlineText title={formatMessage({ id: 'Thực nhận' })} value={actualQty} />
-      </>
-      {isSuccess && (
+      <UnderlineText title={formatMessage({ id: 'common.request' })} value={expectedQty} />
+      {isShowEnable && (
         <>
           <SizedBox height="5px" />
-          <UnderlineText title={formatMessage({ id: 'Chênh lệch' })} value={diff} color="red" />
+          <UnderlineText title={formatMessage({ id: 'bpor.warehouse.estimated_qty' })} value={estimatedQty} />
         </>
       )}
-      {isLiquidated && (
+
+      {isShowActualQty && (
         <>
           <SizedBox height="5px" />
-          <UnderlineText title={formatMessage({ id: 'Dã thanh lý' })} value={diff} color="red" />
+          <UnderlineText title={formatMessage({ id: 'bpor.warehouse.actual_qty' })} value={actualQty} />
+        </>
+      )}
+      {isShowDeviant && (
+        <>
+          <SizedBox height="5px" />
+          <UnderlineText title={formatMessage({ id: 'bpor.warehouse.diff_qty' })} value={diffQty} color="red" />
+        </>
+      )}
+      {isShowLiquidated && (
+        <>
+          <SizedBox height="5px" />
+          <UnderlineText
+            title={formatMessage({ id: 'Dã thanh lý' })}
+            value={liquidatedQty}
+            color="red"
+          />
         </>
       )}
     </>

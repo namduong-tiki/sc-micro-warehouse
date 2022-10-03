@@ -45,8 +45,8 @@ import { formatMessage } from '@/utils/locale';
 //       value: 'Bị từ chối',
 //       colorTag:'error'
 //     },
-//     canceled: {
-//       key: 'canceled',
+//     cancelled: {
+//       key: 'cancelled',
 //       color: '#F50000',
 
 //       // value: 'Hủy',
@@ -94,8 +94,8 @@ import { formatMessage } from '@/utils/locale';
       value: 'Bị từ chối',
       colorTag:'error'
     },
-    canceled: {
-      key: 'canceled',
+    cancelled: {
+      key: 'cancelled',
       value: 'Đã huỷ',
       colorTag:'default'
     },
@@ -267,8 +267,8 @@ import { formatMessage } from '@/utils/locale';
       value: 'VC đang lấy hàng',
       color: '2DB7F5'
     },
-    canceled: {
-      key: 'canceled',
+    cancelled: {
+      key: 'cancelled',
       value: 'Lấy thất bại',
       color: 'F50000'
     },
@@ -470,7 +470,7 @@ export const ORDER_STATUS = {
     value: 'Sẵn sàng giao hàng',
     color: WARNING_COLOR
   },
-  canceled: {
+  cancelled: {
     value: 'Đã hủy',
     color: DANGER_COLOR
   },

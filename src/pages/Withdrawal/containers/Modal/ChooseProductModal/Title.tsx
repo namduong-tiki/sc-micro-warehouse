@@ -15,7 +15,7 @@ const Title:React.FC = () => {
       gutter={12}
     >
       <Col>
-        <HeadTitle1 size="20px">{formatMessage({ id: 'Chọn sản phẩm' })}</HeadTitle1>
+        <HeadTitle1 size="20px">{formatMessage({ id: 'bpor.choose_product' })}</HeadTitle1>
       </Col>
     </Row>
   );

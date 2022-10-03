@@ -12,7 +12,7 @@ interface Props {
 
 const Copy: React.FC<Props> = ({ text }) => {
   const formatMessage = useFormatMessage();
-  const [textHover, setTextHover] = useState(formatMessage({ id: 'Copy' }));
+  const [textHover, setTextHover] = useState(formatMessage({ id: 'common.copy' }));
   const onClick = () => {
     onCopy(text);
     setTextHover(formatMessage({ id: 'Copied' }));
@@ -20,7 +20,7 @@ const Copy: React.FC<Props> = ({ text }) => {
   const onVisibleChange = async (visible: boolean) => {
     if (!visible) {
       await delay(300);
-      setTextHover(formatMessage({ id: 'Copy' }));
+      setTextHover(formatMessage({ id: 'common.copy' }));
     }
   };
   return (

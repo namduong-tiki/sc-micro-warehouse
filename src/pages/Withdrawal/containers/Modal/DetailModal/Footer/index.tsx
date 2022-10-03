@@ -19,12 +19,12 @@ const Container = styled.div`
   justify-content: flex-end;
   background-color: white;
 `;
-const Divider = styled.div`
-  width: 1px;
-  margin: 0 16px;
-  background-color: #d9d9d9;
-  height: 25px;
-`;
+// const Divider = styled.div`
+//   width: 1px;
+//   margin: 0 16px;
+//   background-color: #d9d9d9;
+//   height: 25px;
+// `;
 
 interface Props {
   status: any;
@@ -33,7 +33,8 @@ interface Props {
   checkIsCanSave: any;
   onSubmit: any;
   isLoading: boolean;
-  renderErrorText:any
+  renderErrorText:any;
+  onCancelBPOR: any;
 }
 
 const Footer: React.FC<Props> = ({
@@ -44,6 +45,7 @@ const Footer: React.FC<Props> = ({
   onSubmit,
   isLoading,
   renderErrorText,
+  // onCancelBPOR
 }) => {
   const { isDraft } = status;
   if (isDraft) {
@@ -59,8 +61,10 @@ const Footer: React.FC<Props> = ({
           </NormalText>
         )}
         <Container>
-          <Button danger>{formatMessage({ id: 'Xoá' })}</Button>
-          <Divider />
+          {/* <Button 
+          disabled={isLoading}
+          onClick={onCancelBPOR} danger>{formatMessage({ id: 'Huỷ' })}</Button>
+          <Divider /> */}
           <Button
             onClick={() => onSubmit(true)}
             style={{ borderColor: isCanDraft ? '#40a9ff' : '', color: isCanDraft ? '#40a9ff' : '' }}
@@ -83,7 +87,7 @@ const Footer: React.FC<Props> = ({
   return (
     <SuperContainer>
       <Container>
-        <Button onClick={onCloseDetailModal}>{formatMessage({ id: 'Đóng' })}</Button>
+        <Button onClick={onCloseDetailModal}>{formatMessage({ id: 'common.close' })}</Button>
       </Container>
     </SuperContainer>
   );

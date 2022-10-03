@@ -1,1 +1,7 @@
 @import '~antd/dist/antd.min.css';
+@import '@tikivn/sc-frontend-common/dist/index.css';
+
+#sc-frontend-warehouse-management .ant-cascader-menus {
+    position: static;
+    box-shadow: none;
+}

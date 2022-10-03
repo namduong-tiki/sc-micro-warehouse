@@ -36,7 +36,7 @@ const WeightContainer = styled.div`
 `;
 
 const StyledInput = styled(Input)<DynamicProps>`
-  width: 144px;
+  width: ${props => props?.isMobile ? '100%' : '144px'};
   height: 32px;
   text-align: end;
   border: ${(props) => props?.isError && '1px solid red'};
@@ -79,6 +79,7 @@ interface WarehouseItemProps {
   isDisable?: boolean;
   availableQuantity: number;
   onChangeValueListSelected?: any;
+  isMobile?:any;
 }
 
 const WarehouseItem = ({
@@ -87,6 +88,7 @@ const WarehouseItem = ({
   isDisable,
   availableQuantity,
   onChangeValueListSelected,
+  isMobile
 }: WarehouseItemProps) => {
   const formatMessage = useFormatMessage();
   const { valueInit, sku, weight }: any = checkValidate(warehouse?.code, record);
@@ -126,6 +128,7 @@ const WarehouseItem = ({
       <ColumContainer>
         <InputContainer>
           <StyledInput
+            isMobile={isMobile}
             onChange={(e: any) => {
               const number: any = e?.target?.value || 0;
               if (!Number.isNaN(number) && number <= availableQuantity) {

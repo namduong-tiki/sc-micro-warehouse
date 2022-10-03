@@ -9,17 +9,17 @@ export const QUICK_FILTER = {
     TIKI_RETURN: {
         key: QUICK_FILTER_NAME.TIKI_RETURN,
         value: QUICK_FILTER_NAME.TIKI_RETURN,
-        label: 'Tiki trả hàng cho bạn'
+        label: 'bpor.quick_filter.tiki_return'
     },
     NEED_TO_WITHDRAW_SOON: {
         key: QUICK_FILTER_NAME.NEED_TO_WITHDRAW_SOON,
         value: QUICK_FILTER_NAME.NEED_TO_WITHDRAW_SOON,
-        label: 'Cần rút sớm'
+        label: 'bpor.quick_filter.need_to_withdraw'
     },
     OVERDUE_AND_LIQUIDATION: {
         key: QUICK_FILTER_NAME.OVERDUE_AND_LIQUIDATION,
         value: QUICK_FILTER_NAME.OVERDUE_AND_LIQUIDATION,
-        label: 'Đã quá hạn và thanh lý'
+        label: 'bpor.quick_filter.liquidation'
     },
 
 }

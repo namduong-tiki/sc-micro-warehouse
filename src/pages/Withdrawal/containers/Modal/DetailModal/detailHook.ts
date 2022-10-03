@@ -1,14 +1,17 @@
+import { BPOR_STATUS } from "@/pages/Withdrawal/constants/status"
+import { TAB_NAME } from "@/pages/Withdrawal/constants/tab"
 import { AppContext } from "@/pages/Withdrawal/contexts/AppContext"
-import { getDetailBPOR, getDetailBPORDraft, getHistoriesDetail, getListProductBySellerId, getListWarehouse, updateBPOR } from "@/pages/Withdrawal/services"
+import { cancelBPOR, deleteBPOR, exportBPOR, exportBPORDraft, getDetailBPOR, getDetailBPORDraft, getHistoriesDetail, getListProductBySellerId, getListWarehouse, getTikiReturnWarehouse, updateBPOR } from "@/pages/Withdrawal/services"
 import checkIsUseV2EndPoint from "@/pages/Withdrawal/utils/checkIsUseV2EndPoint"
-import { deleteProductNumberWithdrawal, setNumberWithdrawal } from "@/pages/Withdrawal/utils/setDataCreate"
-import { removeNullPropertyObject } from "@/utils"
+import { cleanNumberWithDrawal, deleteProductNumberWithdrawal, setNumberWithdrawal } from "@/pages/Withdrawal/utils/setDataCreate"
+import { downloadFileFromUrl, removeNullPropertyObject } from "@/utils"
 import { useFormatMessage } from "@/utils/locale"
-import { showErrorGeneral } from "@/utils/message"
+import { showErrorGeneral, showSuccessGeneral } from "@/utils/message"
 import { message, Modal } from "antd"
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useMemo, useState } from "react"
 import { renderWarningStep2 } from "../CreateModal/Footer/helper"
 import { convertListWarehouse } from "../CreateModal/StepScreen/Step2/helper"
+import { checkIsExistInWarehouse } from "./MainContent/RightColum/Content/EditColum/Sum"
 
 export const useDetailHook = () => {
   const formatMessage = useFormatMessage()
@@ -20,23 +23,54 @@ export const useDetailHook = () => {
 
   const [detail, setDetail] = useState<any>()
   const [warehouse, setWarehouse] = useState<any[]>([])
+  const [listWarehouseInformation, setListWarehouseInformation] = useState<any[]>([])
+
   const [items, setItems] = useState([])
 
   const [histories, setHistories] = useState()
 
   const [isShowImportModal, setIsShowImportModal] = useState(false)
 
-
-
   const { tab, selectedId } = query;
-  const sellerId = query?.sellerId
+  const sellerId = detail?.seller_id
+  const currentWarehouse = useMemo(() => {
+    const item = warehouse.find((i:any) => i.code === detail?.warehouse_code)
+    return item
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [detail?.warehouse_code,warehouse.length])
 
-  const getListProduct = async (skus: any = [], itemsParam = [], warehouseCode: any) => {
+
+  useEffect(() => {
+    return () => {
+      cleanNumberWithDrawal()
+    }
+  }, [])
+  
+
+  useEffect(() => {
+
+    const getTikiReturnWarehouseHandle = async () => {
+        try {
+            const response = await getTikiReturnWarehouse()
+            if ('error' in response) {
+                throw new Error(response?.error?.message);
+            }
+            setListWarehouseInformation(response)
+        } catch (error) {
+            showErrorGeneral()
+        }
+    }
+    getTikiReturnWarehouseHandle()
+
+}, [])
+
+  const getListProduct = async (skus: any = [], itemsParam = [], warehouseCode: any,sellerIdParam:any) => {
+    if(!skus || skus.length === 0) return;
     try {
-      setIsLoadingDraft(true)
+      // setIsLoadingDraft(true)
       const cursor = 0
       const tempDataPayload = {
-        seller_ids: [sellerId],
+        seller_ids: [sellerIdParam],
         skus,
       }
       const dataPayload = removeNullPropertyObject(tempDataPayload);
@@ -63,17 +97,18 @@ export const useDetailHook = () => {
     } catch (error: any) {
       message.error(error.message);
     } finally {
-      setIsLoadingDraft(false)
+      // setIsLoadingDraft(false)
     }
   }
 
 
-  const onGetListWarehouse = async (skus: any) => {
+  const onGetListWarehouse = async (skus: any,sellerIdParam:any) => {
+    if(!skus || skus.length === 0) return;
     try {
-      setIsLoading(true)
+      setIsLoadingDraft(true)
       const params = {
         items: skus,
-        seller_id: sellerId
+        seller_id: sellerIdParam
       }
       const response = await getListWarehouse(params)
       if ('error' in response) {
@@ -85,7 +120,7 @@ export const useDetailHook = () => {
     } catch (error: any) {
       message.error(error.message);
     } finally {
-      setIsLoading(false)
+      setIsLoadingDraft(false)
     }
   }
 
@@ -101,13 +136,11 @@ export const useDetailHook = () => {
         paramsGetListProduct.push(sku)
         paramsGetListWarehouse.push({ sku: sku })
       })
-      getListProduct(paramsGetListProduct, response?.items, response.warehouse_code)
-      onGetListWarehouse(paramsGetListWarehouse)
+      getListProduct(paramsGetListProduct, response?.items, response.warehouse_code,response?.seller_id)
+      onGetListWarehouse(paramsGetListWarehouse,response?.seller_id)
     } catch (error) {
       showErrorGeneral()
     }
-
-
   }
 
 
@@ -130,11 +163,11 @@ export const useDetailHook = () => {
     }
   };
 
-  const fetchDetail = async () => {
+  const fetchDetail = async (isNotDraft:boolean = false) => {
     try {
       setIsLoading(true);
       const isCallV2Api = checkIsUseV2EndPoint(tab);
-      if (isCallV2Api) {
+      if (isCallV2Api || isNotDraft) {
         const response = await getDetailBPOR(selectedId);
         if ('error' in response) {
           throw new Error(response?.error?.message);
@@ -158,15 +191,15 @@ export const useDetailHook = () => {
     }
   };
 
-  const initData = () => {
-    fetchDetail();
+  const initData = (isNotDraft?:boolean) => {
+    fetchDetail(isNotDraft);
     fetchHistories();
   }
 
   useEffect(() => {
     initData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [selectedId])
 
 
 
@@ -211,7 +244,7 @@ export const useDetailHook = () => {
     return Modal.confirm({
       title: formatMessage({ id: 'Thoát' }),
       content: formatMessage({ id: 'Có thay đổi chưa lưu. Bạn vẫn muốn thoát?' }),
-      okText: formatMessage({ id: 'Đóng' }),
+      okText: formatMessage({ id: 'common.close' }),
       cancelText: formatMessage({ id: 'Quay lại' }),
       onOk: () => onCloseDetailModal()
     })
@@ -241,12 +274,13 @@ export const useDetailHook = () => {
 
   const checkIsCanSave = () => {
     let rs = false
+    const pickupWarehouseCode = detail?.pickup_warehouse_code
     items.forEach((i: any) => {
       if (i.qty) {
         rs = true
       }
     })
-    return rs
+    return !!(pickupWarehouseCode) && rs
   }
 
   const onSubmit = (isDraft: boolean) => {
@@ -255,7 +289,8 @@ export const useDetailHook = () => {
         setIsLoading(true)
         const itemsParams: any = []
         items.forEach((i: any) => {
-          if (i?.qty) {
+          const isExistInWarehouse = checkIsExistInWarehouse(currentWarehouse,i?.sku);
+          if (i?.qty && isExistInWarehouse) {
             itemsParams.push({
               product_sku: i?.sku,
               expected_qty: i?.qty
@@ -267,15 +302,25 @@ export const useDetailHook = () => {
         }
         if (!isDraftParam) {
           data.status = 'waiting_for_checking'
+          data.warehouse_code = detail?.warehouse_code
         }
         const response = await updateBPOR(data, detail?.id)
         if ('error' in response) {
           throw new Error(response?.error?.message);
         }
         setIsChange(false)
-        await initData()
-        fetchListing()
-      } catch (error) {
+        if(!isDraft && response?.shipment_id){
+          setQuery({
+            ...query,
+            tab:TAB_NAME.PROCESSING,
+            selectedId:response?.shipment_id
+          })
+        }else{
+          await initData()
+          fetchListing()
+        }
+      } catch (error:any) {
+        showErrorGeneral('',error?.message)
         return { error }
       } finally {
         setIsLoading(false)
@@ -283,7 +328,8 @@ export const useDetailHook = () => {
     }
     let missingValue = false
     items.forEach((i: any) => {
-      if (!(i.qty)) {
+      const isExistInWarehouse = checkIsExistInWarehouse(currentWarehouse,i?.sku);
+      if (!(i.qty) || !(isExistInWarehouse)) {
         missingValue = true
       }
     })
@@ -306,7 +352,7 @@ export const useDetailHook = () => {
       const data = {
         reference_code: dataPayload?.referenceCode,
         note: dataPayload?.note,
-        warehouse_code: dataPayload?.warehouseCode
+        pickup_warehouse_code: dataPayload?.pickupWarehouseCode
       }
       const dataFinal = removeNullPropertyObject(data)
 
@@ -316,7 +362,8 @@ export const useDetailHook = () => {
       }
       await initData()
       fetchListing()
-    } catch (error) {
+    } catch (error:any) {
+      showErrorGeneral('',error?.message)
       return { error }
     } finally {
       setIsLoading(false)
@@ -334,7 +381,7 @@ export const useDetailHook = () => {
         const sku = i?.sku
         paramsGetListWarehouse.push({ sku: sku })
       })
-      onGetListWarehouse(paramsGetListWarehouse)
+      onGetListWarehouse(paramsGetListWarehouse,sellerId)
 
       const dataListProduct: any = data.map((i: any) => {
         const tempItem = { ...i }
@@ -359,6 +406,56 @@ export const useDetailHook = () => {
     }
   }
 
+  const onCancelBPOR = async () => {
+    try {
+      setIsLoading(true)
+      const response = await cancelBPOR(detail?.id)
+      if ('error' in response) {
+        throw new Error(response?.error?.message);
+    }
+      showSuccessGeneral(formatMessage({id:'Huỷ thành công'}))
+      await initData(true)
+      fetchListing()
+    } catch (error:any) {
+      showErrorGeneral(formatMessage({id:'Huỷ thất bại'}),error?.message)
+    }finally{
+      setIsLoading(false)
+    }
+  }
+
+  const onDeleteBPOR = async () => {
+    try {
+      setIsLoading(true)
+      const response = await deleteBPOR(detail?.id)
+      if ('error' in response) {
+        throw new Error(response?.error?.message);
+    }
+      showSuccessGeneral(formatMessage({id:'Xoá thành công'}))
+      await initData(true)
+      fetchListing()
+    } catch (error:any) {
+      showErrorGeneral(formatMessage({id:'Xoá thất bại'}),error?.message)
+    }finally{
+      setIsLoading(false)
+    }
+  }
+
+  const onExport = async () => {
+    const ids = detail?.id
+    try {
+        setIsLoading(true)
+        const response = detail?.status === BPOR_STATUS.draft.key ? await exportBPORDraft(ids) : await exportBPOR(ids)
+        if ('error' in response) {
+            throw new Error(response?.error?.message);
+        }
+        const link = response?.result
+        downloadFileFromUrl(link)
+    } catch (error: any) {
+        showErrorGeneral(formatMessage({ id: 'Xuất danh sách thất bại' }), error?.message)
+    } finally {
+        setIsLoading(false)
+    }
+}
 
 
   return {
@@ -382,6 +479,10 @@ export const useDetailHook = () => {
     onOpenImportProductModal,
     onCloseImportProductModal,
     onChooseProductCB,
-    sellerId
+    sellerId,
+    listWarehouseInformation,
+    onCancelBPOR,
+    onDeleteBPOR,
+    onExport,
   }
 }

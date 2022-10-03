@@ -1,40 +1,30 @@
 import { FakeLink, Link1, SubTitle1, Text0 } from '@/components/Text';
 import { Tag } from 'antd';
-import React, { useContext } from 'react';
-import {  ShopOutlined } from '@ant-design/icons';
-import { AppContext } from '../../contexts/AppContext';
-import { checkIsDraftBPOR } from './helper';
+import React from 'react';
+import { ShopOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
-import { useCanSelectSeller } from '@/components/SellerSelect';
 import Copy from '@/components/Copy';
+import { POP_UP } from '../../constants/popup';
+import { useFormatMessage } from '@/utils/locale';
+import PopupReferenceCode from '@/components/PopupReferenceCode';
+import { useActionHook } from '../../hook/actionHook';
+import { checkIsDraftBPOR } from '../../constants/status';
+import { useOpenDetail } from './mainTabHook';
+import { useStatus } from '../../hook/statusHook';
 
-export const useOpenDetail = (id: any) => {
-  const canSelectSeller = useCanSelectSeller();
 
-  const { setDetailModalData, query, setQuery } = useContext(AppContext);
-
-  const onOpenDetail = () => {
-    setQuery({
-      ...query,
-      selectedId: id,
-    });
-    setDetailModalData({
-      isVisible: true,
-    });
-  };
-
-  return {
-    onOpenDetail,
-    canSelectSeller,
-  };
-};
 
 interface Props {
   record: any;
 }
 
 const Code: React.FC<Props> = ({ record }) => {
-  const { onOpenDetail, canSelectSeller } = useOpenDetail(record?.id);
+  const formatMessage = useFormatMessage();
+  const {  canSelectSeller, onSaveInput } = useOpenDetail();
+  const {onOpenDetail : onOpenDetailHook} = useActionHook()
+  const onOpenDetail = () => onOpenDetailHook(record?.id)
+
+  const { onShowPopup, onClosePopup, popupName, setPopupName } = useStatus(record);
   const isDraft = checkIsDraftBPOR(record?.status);
   if (isDraft) {
     const time = record?.created_at
@@ -44,9 +34,31 @@ const Code: React.FC<Props> = ({ record }) => {
       <>
         <Link1 style={{ display: 'block' }}>
           <Link1 size="14px" fontWeight="600" onClick={onOpenDetail}>
-            BPOR nháp - {time}
+          BPOR {formatMessage({id:'bpor.tabs.title.draft'}).toLocaleLowerCase()} - {time}
           </Link1>
         </Link1>
+        {/* reference_code */}
+        <SubTitle1 style={{ display: 'block' }}>{formatMessage({id:'bpor.reference_code'})}:</SubTitle1>
+        {record?.reference_code ? (
+          <SubTitle1 style={{ display: 'block' }}>
+            {record?.reference_code}{' '}
+            <Link1 onClick={() => onShowPopup(POP_UP.REFERENCE_CODE)}>
+              <EditOutlined />
+            </Link1>
+          </SubTitle1>
+        ) : (
+          <Link1 size="14px" onClick={() => onShowPopup(POP_UP.REFERENCE_CODE)}>
+            <PlusOutlined style={{ marginRight: 5 }} /> {formatMessage({ id: 'bpor.input_code' })}
+          </Link1>
+        )}
+        <PopupReferenceCode
+          onClosePopup={onClosePopup}
+          isShowPopup={popupName === POP_UP.REFERENCE_CODE}
+          setIsShowPopup={setPopupName}
+          value={record?.reference_code}
+          onChangeInput={(value: any) => onSaveInput({ referenceCode: value }, record?.id)}
+        />
+
         {canSelectSeller && (
           <Tag style={{ marginTop: 5, borderRadius: 10, backgroundColor: '#F0F0F0' }}>
             <ShopOutlined style={{ color: '#8C8C8C' }} />
@@ -58,25 +70,27 @@ const Code: React.FC<Props> = ({ record }) => {
   }
   return (
     <>
-      <FakeLink size="14px" fontWeight="600" style={{ display: 'block' }}>
+     {record?.code ? <FakeLink size="14px" fontWeight="600" style={{ display: 'block' }}>
         <Link1 onClick={onOpenDetail} style={{ marginRight: 5 }}>
           {record?.code}
         </Link1>
         <Copy text={record?.code} />
-      </FakeLink>
+      </FakeLink> : 
+      <Link1 onClick={onOpenDetail} style={{fontStyle:'italic',display:'block'}}>
+        {formatMessage({id:'bpor.code_proccessing'})}
+      </Link1>
+      }
 
       {/* reference_code */}
-      {record?.reference_code && 
-           <>
-           <SubTitle1 style={{ display: 'block' }}>Mã phiếu gửi nhà bán:</SubTitle1>
-           <Text0 style={{ display: 'block' }}>
-             {record?.reference_code} <Copy text={record?.reference_code} />
-           </Text0>
+      {record?.reference_code && (
+        <>
+          <SubTitle1 style={{ display: 'block' }}>Mã phiếu nhà bán:</SubTitle1>
+          <Text0 style={{ display: 'block' }}>
+            {record?.reference_code} <Copy text={record?.reference_code} />
+          </Text0>
+        </>
+      )}
 
-         </>
-      
-      }
- 
       {canSelectSeller && (
         <Tag style={{ marginTop: 5, borderRadius: 10, backgroundColor: '#F0F0F0' }}>
           <ShopOutlined style={{ color: '#8C8C8C' }} />

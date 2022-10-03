@@ -1,8 +1,7 @@
-import SizedBox from '@/components/SizedBox';
+import { useStatus } from '@/pages/Withdrawal/hook/statusHook';
 import { Modal, Spin } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
-import { useStatus } from '../../MainTab/Status';
 import ChooseProductModal from '../ChooseProductModal';
 import { useDetailHook } from './detailHook';
 import Footer from './Footer';
@@ -37,7 +36,10 @@ const DetailModal: React.FC = () => {
     onOpenImportProductModal,
     onCloseImportProductModal,
     onChooseProductCB,
-    sellerId
+    sellerId,
+    listWarehouseInformation,
+    onCancelBPOR,
+    onExport,
   } = useDetailHook();
   const status = useStatus(detail);
   return (
@@ -54,6 +56,7 @@ const DetailModal: React.FC = () => {
             status={status}
             onCloseDetailModal={onCloseDetailModal}
             onSubmit={onSubmit}
+            onCancelBPOR={onCancelBPOR}
           />
         }
         onCancel={onCloseDetailModal}
@@ -76,9 +79,9 @@ const DetailModal: React.FC = () => {
         <Spin tip="Loading..." spinning={isLoading}>
           <Container>
             <Guideline />
-            <SizedBox height="24px" />
+            {/* <SizedBox height="24px" /> */}
             <MainContent
-            onOpenImportProductModal={onOpenImportProductModal}
+              onOpenImportProductModal={onOpenImportProductModal}
               onSaveInput={onSaveInput}
               onChangeValueItem={onChangeValueItem}
               onRemoveItem={onRemoveItem}
@@ -88,14 +91,20 @@ const DetailModal: React.FC = () => {
               items={items}
               isLoadingDraft={isLoadingDraft}
               warehouse={warehouse}
+              listWarehouseInformation={listWarehouseInformation}
+              onExport={onExport}
             />
           </Container>
         </Spin>
-        {isShowImportModal && <ChooseProductModal 
-        items={items}
-        sellerId={sellerId}
-        cb={onChooseProductCB}
-        onClose={onCloseImportProductModal} isVisible={isShowImportModal}/>}
+        {isShowImportModal && (
+          <ChooseProductModal
+            items={items}
+            sellerId={sellerId}
+            cb={onChooseProductCB}
+            onClose={onCloseImportProductModal}
+            isVisible={isShowImportModal}
+          />
+        )}
       </Modal>
     </>
   );

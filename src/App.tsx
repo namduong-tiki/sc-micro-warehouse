@@ -5,13 +5,13 @@ import { store } from '@/app/store';
 import { Provider } from 'react-redux';
 import LanguageProvider from '@/components/LanguageProvider';
 import { messages } from './locale';
-// import ThemeProvider from './components/ThemeProvider';
+import ThemeProvider from './components/ThemeProvider';
 import ConfigProvider from './components/ConfigProvider';
 
 function App() {
   return (
     <React.StrictMode>
-      {/* <ThemeProvider> */}
+      <ThemeProvider>
         <Provider store={store}>
           <ConfigProvider>
             <LanguageProvider messages={messages}>
@@ -19,7 +19,7 @@ function App() {
             </LanguageProvider>
           </ConfigProvider>
         </Provider>
-      {/* </ThemeProvider> */}
+      </ThemeProvider>
     </React.StrictMode>
   );
 }

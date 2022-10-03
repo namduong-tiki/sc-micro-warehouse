@@ -14,7 +14,7 @@ const Footer = ({ onBack, onNext, onSave, isCanFinish, isCanNext, onCancel, curr
   const formatMessage = useFormatMessage();
   return (
     <Container>
-      <Button onClick={onCancel}>{formatMessage({ id: 'Huỷ bỏ' })}</Button>
+      <Button onClick={onCancel}>{formatMessage({ id: 'bpor.cancel' })}</Button>
       {currentStep === 2 && (
         <>
           <SizedBox width="8px" />

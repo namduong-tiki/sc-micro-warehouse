@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { HeadTitle2 } from '@/components/Text';
 import SizedBox from '@/components/SizedBox';
 import { formatMessage } from '@/utils/locale';
+import { useActionHook } from '@/pages/Withdrawal/hook/actionHook';
 
 const HeaderContainer = styled.div`
   min-height: 70px;
@@ -29,7 +30,7 @@ interface Props {
   [key: string]: any;
 }
 
-const Header: React.FC<Props> = ({ status = {}, onOpenImportProductModal }) => {
+const Header: React.FC<Props> = ({ status = {}, onOpenImportProductModal, id, onExport }) => {
   const {
     isDraft,
     isCancel,
@@ -40,6 +41,8 @@ const Header: React.FC<Props> = ({ status = {}, onOpenImportProductModal }) => {
     isWaitingPreparing,
   } = status;
 
+  const { onOpenPrintBPOR: onOpenPrintBPORHook } = useActionHook();
+  const onOpenPrintBPOR = () => onOpenPrintBPORHook(id)
   return (
     <HeaderContainer>
       <TitleContainer>
@@ -51,9 +54,9 @@ const Header: React.FC<Props> = ({ status = {}, onOpenImportProductModal }) => {
       <ButtonContainer>
         {(isDraft || isWaitingConfirm || isWaitingPreparing || isReadyToReturn || isCancel || isSuccess || isLiquidated) && (
           <>
-            <Button>
+            <Button onClick={onExport}>
               <DownloadOutlined style={{ marginRight: 5 }} />
-              {formatMessage({ id: 'Xuất danh sách sản phẩm' })}
+              {formatMessage({ id: 'common.export_list_product' })}
             </Button>
             <SizedBox width="12px" />
           </>
@@ -61,29 +64,29 @@ const Header: React.FC<Props> = ({ status = {}, onOpenImportProductModal }) => {
 
         {isReadyToReturn && (
           <>
-            <Button type="primary">
+            <Button type="primary"  onClick={onOpenPrintBPOR}>
               <PrinterOutlined style={{ marginRight: 5 }} />
-              {formatMessage({ id: 'In phiếu rút hàng' })}
+              {formatMessage({ id: 'bpor.print_bpor' })}
             </Button>
             <SizedBox width="12px" />
           </>
         )}
 
-        {isReadyToReturn && (
+        {/* {isReadyToReturn && (
           <>
             <Button type="primary">
               <PrinterOutlined style={{ marginRight: 5 }} />
-              {formatMessage({ id: 'In uỷ quyền' })}
+              {formatMessage({ id: 'bpor.print_authorization' })}
             </Button>
             <SizedBox width="12px" />
           </>
-        )}
+        )} */}
 
         {isDraft && (
           <>
             <Button onClick={onOpenImportProductModal} type="primary">
               <PlusOutlined style={{ marginRight: 5 }} />
-              {formatMessage({ id: 'Chọn sản phẩm' })}
+              {formatMessage({ id: 'bpor.choose_product' })}
             </Button>
             <SizedBox width="12px" />
           </>

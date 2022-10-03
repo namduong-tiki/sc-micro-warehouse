@@ -11,6 +11,7 @@ import { getListBPOR, getListBPORDraft } from '@/pages/Withdrawal/services';
 import { showErrorGeneral } from '@/utils/message';
 import checkIsUseV2EndPoint from '../utils/checkIsUseV2EndPoint';
 import { checkStatusParam } from '../utils/checkStatusParam';
+import useMediaQuery from '../hook/mediaQueyHook';
 
 interface Props {
   children: React.ReactNode;
@@ -43,6 +44,7 @@ const initQuery = {
 };
 
 const useAppContext = (data: any) => {
+  const isMobile = useMediaQuery('(max-width: 767px)');
   const { params } = useRouteParams();
   const { replace } = useRouter();
   const user = useSelector(userSellerDetailSelector);
@@ -58,21 +60,24 @@ const useAppContext = (data: any) => {
 
   const [createModalData, setCreateModalData] = useState({});
   const [detailModalData, setDetailModalData] = useState({});
+  const [printModalData, setPrintModalData] = useState({});
+
 
   const [query, setQuery] = useState({
     ...initQuery,
     page: params?.page,
-    limit: params?.limit,
+    limit: params?.limit || initQuery.limit, 
     sellerId: hasOnlyOneSeller ? sellerIds[0] : params.sellerId,
     // sellerSelected: sellerId || params?.seller_ids,
     tab: params?.tab ? params.tab : TAB_NAME.PROCESSING,
-    shippingMethod: params?.shipping_method,
     expectedPickupDate: params?.expectedPickupDate,
     status: params?.status,
     warehouseCode: params?.warehouse_code,
     code: params?.code,
-    referenceCode: params?.reference_code,
+    referenceCode: params?.referenceCode,
     selectedId: params?.selectedId,
+    shippingMethod: params?.shippingMethod,
+    needWithdraw: params?.needWithdraw,
     // statusPickup: params?.status_pickup ? params?.status_pickup.replace('in|', '') : '',
     // type: params?.type ? params?.type.replace('in|', '') : '',
   });
@@ -89,12 +94,13 @@ const useAppContext = (data: any) => {
     limit,
     page,
     selectedId,
+    needWithdraw
   } = query;
 
   // replace url
   useEffect(() => {
     const obj = {
-      limit,
+      limit: limit || initQuery.limit,
       page,
       sellerId,
       tab,
@@ -105,6 +111,7 @@ const useAppContext = (data: any) => {
       code,
       referenceCode,
       selectedId,
+      needWithdraw,
     };
     const route = removeNullPropertyObject(obj);
     replace({
@@ -124,13 +131,14 @@ const useAppContext = (data: any) => {
     limit,
     page,
     selectedId,
+    needWithdraw
   ]);
 
   const fetchList = async () => {
     try {
       setIsLoading(true);
       const obj = {
-        limit,
+        limit: limit || initQuery.limit,
         page,
         seller_ids: sellerId,
         shipping_method: shippingMethod,
@@ -139,6 +147,7 @@ const useAppContext = (data: any) => {
         warehouse_code: warehouseCode,
         code,
         reference_code: referenceCode,
+        sla_pickup_remain_days: needWithdraw ? 10 : ''
       };
       const params = stringify(removeNullPropertyObject(obj));
       const isCallV2Api = checkIsUseV2EndPoint(tab);
@@ -159,7 +168,9 @@ const useAppContext = (data: any) => {
         setListingInfo(response?.paging);
       }
     } catch (error: any) {
-      showErrorGeneral();
+      setListing([]);
+      setListingInfo({});
+      showErrorGeneral('', error?.message);
     } finally {
       setIsLoading(false);
     }
@@ -182,6 +193,7 @@ const useAppContext = (data: any) => {
     expectedPickupDate,
     limit,
     page,
+    needWithdraw,
   ]);
 
   // open modal detail is mount
@@ -206,7 +218,10 @@ const useAppContext = (data: any) => {
     setCreateModalData,
     detailModalData,
     setDetailModalData,
+    printModalData,
+    setPrintModalData,
     currentSellerId,
     fetchList,
+    isMobile
   };
 };

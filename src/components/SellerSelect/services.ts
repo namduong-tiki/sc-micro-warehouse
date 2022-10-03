@@ -27,7 +27,7 @@ export const getSeller: GetSellerRequest = ({ sellerId }) => {
 };
 
 export const getSellerOptions: GetSellerOptionsRequest = async ({ sellerId }) => {
-  if (sellerId === '') {
+  if (!sellerId) {
     const response = await getSellers();
     return response.data;
   }

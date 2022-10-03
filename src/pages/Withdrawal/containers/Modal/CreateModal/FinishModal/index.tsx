@@ -1,4 +1,4 @@
-import { Modal } from 'antd'
+import { Modal, Spin } from 'antd'
 import React from 'react'
 import styled from 'styled-components'
 import Title from './Title'
@@ -14,10 +14,10 @@ const Container = styled.div`
 type Props = {}
 
 const FinishModal: React.FC<Props> = () => {
-    const {isShowModalFinish, data, total, onSaveAndClose, isDraft, onClose} = useFinishModal()
+    const {isShowModalFinish, data, total,totalError, onSaveAndClose, isDraft, onClose, isLoading} = useFinishModal()
   return (
     <Modal
-    title={<Title total={total} />}
+    title={<Title total={total} totalError={totalError}/>}
     visible={isShowModalFinish}
     footer={<Footer action={onSaveAndClose} />}
     onCancel={onClose}
@@ -31,12 +31,15 @@ const FinishModal: React.FC<Props> = () => {
 
     }}
   >
+    <Spin spinning={isLoading}>
       <Container>
         <Body
           data={data}
           isDraft={isDraft}
         />
       </Container>
+    </Spin>
+
   </Modal>
   )
 }

@@ -63,21 +63,14 @@ const ContentContainer = styled.div`
 `;
 
 const renderTitle = (tab: any) => {
-  //   switch (tab.value) {
-  //     case TAB_NAME.DRAFT:
-  //       return `${tab.title}${tabsData?.draft ? ` (${tabsData?.draft})` : ''}`;
-  //       case TAB_NAME.PROCESSING:
-  //         return `${tab.title}${tabsData?.processing ? ` (${tabsData?.processing})` : ''}`;
-  //     case TAB_NAME.WAITING:
-  //       return `${tab.title}${tabsData?.processing ? ` (${tabsData?.processing})` : ''}`;
-  //     case TAB_NAME.SUCCESSFULLY:
-  //       return `${tab.title}${tabsData?.completed ? ` (${tabsData?.completed})` : ''}`;
-  //     case TAB_NAME.LIQUIDATED:
-  //       return `${tab.title}${tabsData?.draft ? ` (${tabsData?.draft})` : ''}`;
-  //     default:
-  //       return tab.title;
-  //   }
-  return `Kho ${tab.code.toUpperCase()} (${tab.countProduct} sản phẩm - Số lượng: ${tab.total})`;
+  return (
+    <>
+      <span>{`Kho ${tab.code.toUpperCase()} (${tab.countProduct} sản phẩm - Số lượng: ${
+        tab.total
+      })`}</span>
+      {!tab?.tikiReturnWarehouse && <span style={{ color: 'red' }}>*</span>}
+    </>
+  );
 };
 
 export default function WarehouseTab({

@@ -82,7 +82,7 @@ const SelectStatus = ({ statusValue = [], onSelectStatus, options = [] }: Select
   const isFiltering = statusValue.length > 0;
   return (
     <>
-      <SizedBox width={'8px'} />
+      {/* <SizedBox width={'8px'} /> */}
       <Popover
         visible={isVisible}
         placement="bottom"

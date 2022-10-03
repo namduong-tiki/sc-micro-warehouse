@@ -1,10 +1,9 @@
 import { useFormatMessage } from '@/utils/locale';
-import { Input, Popover, Button, Select } from 'antd';
+import { Popover, Button, Select } from 'antd';
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import DatePicker from '../DatePicker';
 import SizedBox from '../SizedBox';
-import { Text1, Title1 } from '../Text';
+import { Title1 } from '../Text';
 
 const Option = Select.Option
 
@@ -53,13 +52,6 @@ const PopupChooseWarehouse: React.FC<Props> = ({
 
 export default PopupChooseWarehouse;
 
-const GuidlelineBox = styled.div`
-  background-color:#E6F7FF;
-  border-radius:2px ;
-  padding: 5px 12px;
-  margin-bottom: 12px ;
-`
-
 
 const Content: React.FC<Props> = ({ onClosePopup, value, onChangeInput, values }) => {
   const formatMessage = useFormatMessage();
@@ -82,7 +74,7 @@ const Content: React.FC<Props> = ({ onClosePopup, value, onChangeInput, values }
     <Select value={valueInput} placeholder={formatMessage({id:'Chọn'})} style={{ width: '100%' }} onChange={onChange}>
       {values.map((i:any) => {
         return (
-          <Option key={i?.code} value={i?.code}>{formatMessage({id:'Kho'})} {i?.code.toUpperCase()}</Option>
+          <Option key={i?.code} value={i?.code}>{formatMessage({id:'bpor.warehouse'})} {i?.code.toUpperCase()}</Option>
         )
       })}
     </Select>

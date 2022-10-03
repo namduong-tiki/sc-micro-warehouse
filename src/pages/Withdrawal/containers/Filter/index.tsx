@@ -1,25 +1,25 @@
 import SizedBox from '@/components/SizedBox';
 import { Search } from '@tikivn/sc-frontend-common';
-import { Col, Row, Button } from 'antd';
+import { Col, Row } from 'antd';
 import styled from 'styled-components';
 import { useFormatMessage } from '@/utils/locale';
-import { PlusOutlined } from '@ant-design/icons';
+// import { PlusOutlined } from '@ant-design/icons';
 import SelectStatus from '../../components/SelectStatus';
 import DatePicker from '@/components/DatePicker';
 import dayjs from 'dayjs';
-import DrawerFilter from '../../components/DrawerFilter';
+// import DrawerFilter from '../../components/DrawerFilter';
 import { useFilterHook } from './filterHook';
 
 const Container = styled.div`
   padding: 16px 24px;
 `;
-const StyledButton = styled(Button)`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-around;
-  height: 40px;
-`;
+// const StyledButton = styled(Button)`
+//   display: flex;
+//   flex-direction: row;
+//   align-items: center;
+//   justify-content: space-around;
+//   height: 40px;
+// `;
 
 type Props = {};
 
@@ -27,11 +27,12 @@ export default function Filter({}: Props) {
   const formatMessage = useFormatMessage();
   const {
     statusValue,
+    placeholderInput,
     onSelectDate,
     onSelectStatus,
-    onOpenDrawer,
-    onCloseDrawer,
-    isOpenDrawer,
+    // onOpenDrawer,
+    // onCloseDrawer,
+    // isOpenDrawer,
     expectedPickupDate,
     searchValue,
     onChangeSearch,
@@ -40,16 +41,14 @@ export default function Filter({}: Props) {
 
   return (
     <>
-      <DrawerFilter isVisible={isOpenDrawer} onClose={onCloseDrawer} />
+      {/* <DrawerFilter isVisible={isOpenDrawer} onClose={onCloseDrawer} /> */}
       <Container>
         <Row gutter={24}>
           <Col span={12}>
             <Search
               size="large"
               id="search-1"
-              placeholder={formatMessage({
-                id: 'Nhập tối đa 50 mã phiếu cách nhau bằng dấu ‘ , ‘',
-              })}
+              placeholder={placeholderInput}
               value={searchValue}
               onChange={onChangeSearch}
             />
@@ -64,21 +63,22 @@ export default function Filter({}: Props) {
                 format="DD/MM/YYYY"
                 name="start_date"
                 onChange={onSelectDate}
+                allowClear
                 value={expectedPickupDate && dayjs(expectedPickupDate, 'YYYY-MM-DD')}
                 defaultValue={expectedPickupDate && dayjs(expectedPickupDate, 'YYYY-MM-DD')}
-                placeholder={formatMessage({ id: 'Lịch rút hàng' })}
+                placeholder={formatMessage({ id: 'bpor.filter.date' })}
                 style={{
                   minWidth: 180,
                   borderColor: !!expectedPickupDate ? '#40a9ff' : '#d9d9d9',
                 }}
               />
 
-              <SizedBox width={'8px'} />
+              {/* <SizedBox width={'8px'} />
               <StyledButton onClick={onOpenDrawer}>
                 {formatMessage({ id: 'bpor.another_filter' })}
                 <SizedBox width="6px" />
                 <PlusOutlined />
-              </StyledButton>
+              </StyledButton> */}
             </Row>
           </Col>
         </Row>

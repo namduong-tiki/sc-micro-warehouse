@@ -16,5 +16,5 @@ export const PAYMENT_CONTROLLER_STATUS = {
   PARTIAL_PAID: 'partial_paid',
   SYNC_FAIL: 'sync_fail',
   PAYMENT_FAIL: 'payment_fail',
-  CANCELED: 'canceled',
+  CANCELLED: 'cancelled',
 };

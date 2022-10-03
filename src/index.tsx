@@ -4,7 +4,6 @@ import ReactDOM from 'react-dom';
 import App from '@/App';
 import reportWebVitals from '@/reportWebVitals';
 import '@/public-path';
-import '@tikivn/sc-frontend-common/dist/index.css'
 import { defaultConfig } from '@tikivn/sc-frontend-common';
 import { ContainerInterface } from './types';
 import { ROOT_NAME } from './constants';

@@ -40,7 +40,10 @@ export const useCreateFooter = () => {
         }
         return response
       } catch (error: any) {
-        showErrorGeneral(error)
+        showErrorGeneral(formatMessage({id:'Có lỗi xãy ra khi tạo'}),error?.message)
+        return {
+          isError:true
+        }
       }
     }
     setIsLoading(true)
@@ -67,6 +70,7 @@ export const useCreateFooter = () => {
         return rs;
       })
     );
+    setIsLoading(false)
     setFinishModalData({
       data:results,
       isVisible:true,

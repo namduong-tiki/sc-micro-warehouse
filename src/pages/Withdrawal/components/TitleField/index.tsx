@@ -64,7 +64,7 @@ const TitleField: React.FC<Props> = ({onOpenCreateModal}) => {
       {/* Guidleline  */}
       <Row gutter={[12, 4]}>
         <Col>
-          <GuidelineText>{formatMessage({ id: 'Vui lòng xem hướng dẫn chi tiết:' })}</GuidelineText>
+          <GuidelineText>{formatMessage({ id: 'bpor.home.title' })}</GuidelineText>
         </Col>
         <Col>
           <RowText>

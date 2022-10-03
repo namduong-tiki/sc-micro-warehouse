@@ -5,7 +5,7 @@ export const TAB_NAME = {
     WAITING:'waiting',
     SUCCESSFULLY : 'successfully',
     // LIQUIDATED:'liquidated',
-    CANCELED:'canceled',
+    CANCELLED:'cancelled',
 }
 
 export const TABS = [
@@ -30,7 +30,7 @@ export const TABS = [
     //     title: 'bpor.tabs.title.liquidated'
     // },
     {
-        value:TAB_NAME.CANCELED,
-        title: 'bpor.tabs.title.canceled'
+        value:TAB_NAME.CANCELLED,
+        title: 'bpor.tabs.title.cancelled'
     },
 ]

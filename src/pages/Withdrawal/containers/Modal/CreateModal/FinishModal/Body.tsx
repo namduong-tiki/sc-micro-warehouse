@@ -26,8 +26,31 @@ interface Props {
   [any: string]: any;
 }
 
-const Body: React.FC<Props> = ({ data = [], isDraft }) => {
+const Body: React.FC<Props> = ({ data = [], isDraft, }) => {
   const formatMessage = useFormatMessage();
+  if(data.length === 0){
+    return (
+      <Container
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <img
+          style={{
+            height: 186,
+            width: 186,
+            marginBottom: 10,
+          }}
+          alt="fininshModal"
+          src={logo}
+        />
+        <SubTitle1>
+          Tạo thất bại vui lòng thử lại sau
+        </SubTitle1>
+      </Container>
+    );
+  }
   if (!isDraft) {
     return (
       <Container

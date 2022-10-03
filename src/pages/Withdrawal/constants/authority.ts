@@ -1,3 +1,3 @@
 export const AUTHORITY = {
-  LIST: 'payment_controller.list',
+  ALL: 'requisition.all',
 };

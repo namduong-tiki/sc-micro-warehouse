@@ -10,7 +10,7 @@ import { SumProduct, SumWarehouse } from './Sum';
 export const EditColum = ({items = [],warehouse,onChangeValueItem,onRemoveItem}:any) => {
   return [
     {
-      title: () => <Text0 fontWeight="600">{formatMessage({ id: 'STT' })}</Text0>,
+      title: () => <Text0 fontWeight="600">{formatMessage({ id: 'common.number' })}</Text0>,
       dataIndex: 'stt',
       with: '7%',
       align: 'center',
@@ -21,7 +21,7 @@ export const EditColum = ({items = [],warehouse,onChangeValueItem,onRemoveItem}:
       },
     },
     {
-      title: () => <Text0 fontWeight="600">{formatMessage({ id: 'Sản phẩm' })}</Text0>,
+      title: () => <Text0 fontWeight="600">{formatMessage({ id: 'bpor.product' })}</Text0>,
       width: '60%',
       dataIndex: 'name',
       key: 'name',
@@ -44,7 +44,7 @@ export const EditColum = ({items = [],warehouse,onChangeValueItem,onRemoveItem}:
       render: (_: any, record: any) => {
         if (record?.isSum)
           return (
-            <SumWarehouse warehouseCode={warehouse?.code}/>
+            <SumWarehouse warehouseCode={warehouse?.code} warehouse={warehouse}/>
           );
         const { availableQuantity, isDisable } = checkProductInWarehouse(record?.sku, warehouse);
 

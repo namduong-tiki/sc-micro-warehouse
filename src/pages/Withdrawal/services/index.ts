@@ -7,9 +7,9 @@ import {
   ImportFileParams
 } from "../types";
 
-export const getTotalByStatus = () => {
+export const getTotalByStatus = (params:string) => {
   return apiGet(
-    `${process.env.REACT_APP_API_SC}/seller/v2/outbound_shipments/count`,
+    `${process.env.REACT_APP_API_SC}/seller/v2/outbound_shipments/count?${params}`,
     {},
     {
       hasResponseServerMessage: true,
@@ -91,7 +91,6 @@ export const getHistoriesDetail = (id: any) => {
 
 export const getListProductBySellerId = (params: GetListProductBySellerIdParams) => {
   const { cursor, dataPayload, limit = 20 } = params
-  // https://api.tala.xyz/janus-query
   const query = cursor ? `limit=${limit}&cursor=${cursor}` : `limit=${limit}`
   const endpoint = `sc/products?${query}&include=common,attributes,inventory`;
   return apiPost(
@@ -129,7 +128,6 @@ export const getListWarehouse = (params: GetListWarehouseParams) => {
       hasResponseServerMessage: true
     }
   );
-
 }
 
 export const getTikiReturnWarehouse = () => {
@@ -177,6 +175,50 @@ export const importFileProduct = (params: ImportFileParams) => {
     {
       body: params,
     },
+    {
+      fullpath: true,
+      hasResponseServerMessage: true
+    }
+  );
+}
+
+export const deleteBPOR = (id: any) => {
+  return apiPut(
+    `${process.env.REACT_APP_API_SC}/seller/v2/inventory_withdrawals/${id}/delete`,
+    {},
+    {
+      fullpath: true,
+      hasResponseServerMessage: true
+    }
+  );
+}
+
+export const cancelBPOR = (id: any) => {
+  return apiPost(
+    `${process.env.REACT_APP_API_SC}/seller/v2/outbound_shipments/${id}/cancel`,
+    {},
+    {
+      fullpath: true,
+      hasResponseServerMessage: true
+    }
+  );
+}
+
+export const exportBPORDraft = (ids: any) => {
+  return apiPost(
+    `${process.env.REACT_APP_API_SC}/seller/v2/inventory_withdrawals/export`,
+    {body:{ids}},
+    {
+      fullpath: true,
+      hasResponseServerMessage: true
+    }
+  );
+}
+
+export const exportBPOR = (ids: any) => {
+  return apiPost(
+    `${process.env.REACT_APP_API_SC}/seller/v2/outbound_shipments/export`,
+    {body:{ids}},
     {
       fullpath: true,
       hasResponseServerMessage: true

@@ -18,14 +18,15 @@ const StyledSelectInputOption = styled(Select)`
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 
-  &&& > .ant-select-selector {
+  > .ant-select-selector {
     border-right: 0;
-    height: 40px;
     display: flex;
     align-items: center;
+    height: 40px;
   }
-  & > .ant-select-selector > span.ant-select-selection-placeholder {
+  > .ant-select-selector > span.ant-select-selection-placeholder {
     color: #595959;
+    height: 40px;
   }
 `;
 
@@ -44,7 +45,7 @@ interface FilterProps {
   onChangeQuery?: any;
   query?: any;
   isShowCate?: any;
-  onOpenImportModal?:any
+  onOpenImportModal?: any;
 }
 
 const Filter: React.FC<FilterProps> = ({
@@ -98,10 +99,10 @@ const Filter: React.FC<FilterProps> = ({
     }
   };
 
-  const onCategoriesChange = (val:any) => {
-    const tempValue = val && val.length > 0 ? get(val,[0]) : ''
-    onChangeQuery('categories',tempValue)
-  }
+  const onCategoriesChange = (val: any) => {
+    const tempValue = val && val.length > 0 ? get(val, [0]) : '';
+    onChangeQuery('categories', tempValue);
+  };
 
   return (
     <>
@@ -116,7 +117,7 @@ const Filter: React.FC<FilterProps> = ({
                 value={filterInputType}
               >
                 <Option value="name">{formatMessage({ id: 'bpor.product_name' })}</Option>
-                <Option value="sku">{formatMessage({ id: 'SKU' })}</Option>
+                <Option value="sku">SKU</Option>
                 <Option value="code">{formatMessage({ id: 'bpor.order_code' })}</Option>
               </StyledSelectInputOption>
             </Col>
@@ -154,18 +155,18 @@ const Filter: React.FC<FilterProps> = ({
           </Row>
         </Col>
         <Col span={15}>
-          <Row  style={{ display: 'flex', flexDirection: 'row' }}>
+          <Row style={{ display: 'flex', flexDirection: 'row' }}>
             <Spin spinning={!isShowCate}>
-              <div style={{width:350, height:40 ,border:!isShowCate ? '1px solid grey' : '0px' }}>
-                {isShowCate && 
-                <CategoriesCascader size='large' onChange={onCategoriesChange} />
-                }
+              <div
+                style={{ width: 350, height: 40, border: !isShowCate ? '1px solid grey' : '0px' }}
+              >
+                {isShowCate && <CategoriesCascader size="large" onChange={onCategoriesChange} placeholder={formatMessage({id:'bpor.category'})} />}
               </div>
             </Spin>
-           
-            <Button onClick={()=> onChangeQuery('clearCate')} style={{height:40}}>
-              <CloseOutlined  />
-            </Button> 
+
+            <Button onClick={() => onChangeQuery('clearCate')} style={{ height: 40 }}>
+              <CloseOutlined />
+            </Button>
             <Flex1>
               <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                 <SizedBox width="7px" />

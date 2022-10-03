@@ -1,0 +1,112 @@
+version: '2'
+config:
+  slack_notify: true
+  slack_channel: sc-frontend-warehouse-management
+environment:
+  BUILD_IMAGE: 'maven:3.6-jdk-11'
+jobs:
+  build_docker:
+    steps:
+      - build_image:
+          build_args: '--build-arg BUILD_ENV=uat'
+  publish_docker:
+    steps:
+      - push_image
+  deploy_dev:
+    steps:
+      - deploy_dev:
+          cluster: dev
+          namespace: marketplace
+          workload: sc-frontend-warehouse-management
+          spinnaker_pipeline: generic-v2
+          deployment_config: dev
+  build_prod_docker:
+    steps:
+      - build_image:
+          build_args: '--build-arg BUILD_ENV=production'
+  publish_prod_docker:
+    steps:
+      - push_image
+  deploy_prod:
+    steps:
+      - deploy_production:
+          cluster: k8s-marketplace-prod
+          namespace: default
+          workload: sc-frontend-warehouse-management
+          spinnaker_pipeline: generic-v2
+          deployment_config: prod
+workflows:
+  jenkins_pipeline:
+    jobs:
+      - build_docker:
+          filters:
+            branches:
+              only:
+                - dev
+      - publish_docker:
+          requires:
+            - build_docker
+          filters:
+            branches:
+              only:
+                - dev
+      - deploy_dev:
+          requires:
+            - publish_docker
+          filters:
+            branches:
+              only:
+                - dev
+      - build_prod_docker:
+          filters:
+            branches:
+              only:
+                - master
+      - publish_prod_docker:
+          requires:
+            - build_prod_docker
+          filters:
+            branches:
+              only:
+                - master
+      - deploy_prod:
+          requires:
+            - publish_prod_docker
+          filters:
+            branches:
+              only:
+                - master
+deployment_config:
+  dev:
+    ingress:
+      hosts:
+        - host: sc-frontend-warehouse-management.dev.tiki.services
+          paths:
+            - path: /
+              port: '80'
+      autoTls: true
+    replicaCount: 1
+  prod:
+    resources:
+      requests:
+        cpu: 30m
+        memory: 100Mi
+    autoscaling:
+      enabled: true
+      minReplicas: 1
+      maxReplicas: 10
+      metrics:
+        - type: Resource
+          resource:
+            name: memory
+            target:
+              type: Utilization
+              averageUtilization: 65
+    ingress:
+      hosts:
+        - host: sc-frontend-warehouse-management.tiki.services
+          paths:
+            - path: /
+              port: '80'
+      autoTls: true
+    replicaCount: 1

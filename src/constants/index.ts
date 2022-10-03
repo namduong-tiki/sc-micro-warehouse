@@ -1,6 +1,6 @@
 export const isQiankun = !!window.__POWERED_BY_QIANKUN__;
 export const BASENAME = isQiankun
-  ? `${process.env.REACT_APP_SC_ROOT}#/warehouse-management`
+  ? `${process.env.REACT_APP_SC_ROOT}#/warehouse-management/fbt`
   : "/";
 
 export const ROOT_NAME = "sc-frontend-warehouse-management";

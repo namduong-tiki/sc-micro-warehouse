@@ -36,21 +36,21 @@ const Row = styled.div`
 `;
 
 const StyledTable = styled(Table)`
-  &&& .ant-table {
+   .ant-table {
     .ant-table-container {
       border-left: 1px solid #d9d9d9;
       border-top: 1px solid #d9d9d9;
     }
-    & .ant-table-thead > tr > th.ant-table-cell {
+     .ant-table-thead > tr > th.ant-table-cell {
       border-bottom: 1px solid #d9d9d9;
       border-right: 1px solid #d9d9d9;
       background-color: #f5f5f5;
     }
-    & .ant-table-tbody > tr > td.ant-table-cell {
+     .ant-table-tbody > tr > td.ant-table-cell {
       border-right: 1px solid #f0f0f0;
       border-bottom: 1px solid #d9d9d9;
     }
-    & .ant-table-tbody > tr > td.ant-table-cell:last-child {
+     .ant-table-tbody > tr > td.ant-table-cell:last-child {
       border-right: 1px solid #d9d9d9;
       border-bottom: 1px solid #d9d9d9;
     }
@@ -58,17 +58,17 @@ const StyledTable = styled(Table)`
 `;
 
 const MainTab: React.FC = () => {
-  const { listing, listingInfo, onPageChange, limit,selected, onSelect, isAllSelected, isIndeterminate } = useListingHook();
+  const { listing, listingInfo, onPageChange, limit,selected, onSelect, isAllSelected, isIndeterminate, isCanExport, onExport } = useListingHook();
   const formatMessage = useFormatMessage();
   return (
     <Container>
       <SupContainer>
         <Row>
-          <Title>{formatMessage({id:'Phiếu rút hàng'})}: {listingInfo?.total}</Title>
+          <Title>{formatMessage({id:'bpor'})}: {listingInfo?.total}</Title>
           <Line />
-          <Button>
+          <Button disabled={isCanExport} onClick={onExport}>
             <DownloadOutlined />
-            {formatMessage({id:'Xuất danh sách BPOR'})}
+            {formatMessage({id:'bpor.home.export'})}
           </Button>
         </Row>
         <SizedBox height="24px" />
@@ -88,7 +88,7 @@ const MainTab: React.FC = () => {
             current: listingInfo?.current_page || 1,
             total: listingInfo?.total,
             showTotal: (total, range) =>
-              `${range[0]}-${range[1]}(${formatMessage({ id: 'Tổng cộng' })}: ${total})`,
+              `${range[0]}-${range[1]}(${formatMessage({ id: 'bpor.sum.total' })}: ${total})`,
             onChange: (page, pageSize) => onPageChange(page, pageSize),
           }}
         />

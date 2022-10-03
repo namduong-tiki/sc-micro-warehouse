@@ -11,8 +11,14 @@ const Row = styled.div<PropsStyled>`
   display: flex;
   flex-direction: row;
 `;
-const Col = styled.div<PropsStyled>`
-  flex: ${(props) => props.flex};
+// const Col = styled.div<PropsStyled>`
+//     flex: ${(props) => props.flex};
+// `;
+const Col1 = styled.div<PropsStyled>`
+  flex: 1;
+`;
+const Col3 = styled.div<PropsStyled>`
+  flex: 3;
 `;
 
 const MainContent: React.FC<PropsStyled> = ({
@@ -26,20 +32,23 @@ const MainContent: React.FC<PropsStyled> = ({
   warehouse,
   onSaveInput,
   onOpenImportProductModal,
+  listWarehouseInformation,
+  onExport,
 }) => {
   return (
     <Row>
-      <Col flex={1}>
+      <Col1 flex={1}>
         <LeftColum
           onSaveInput={onSaveInput}
           record={record}
           status={status}
-          warehouse={warehouse}
+          listWarehouseInformation={listWarehouseInformation}
         />
-      </Col>
+      </Col1>
       <SizedBox width="24px" />
-      <Col flex={3}>
+      <Col3 flex={3}>
         <RightColum
+          onExport={onExport}
           onOpenImportProductModal={onOpenImportProductModal}
           onChangeValueItem={onChangeValueItem}
           onRemoveItem={onRemoveItem}
@@ -50,7 +59,7 @@ const MainContent: React.FC<PropsStyled> = ({
           items={items}
           isLoadingDraft={isLoadingDraft}
         />
-      </Col>
+      </Col3>
     </Row>
   );
 };

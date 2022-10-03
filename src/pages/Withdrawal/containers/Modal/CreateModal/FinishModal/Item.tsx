@@ -1,12 +1,11 @@
-import get from 'lodash/get';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Tag } from 'antd';
 import dayjs from 'dayjs';
-import { useFormatMessage } from '@/utils/locale';
 import SizedBox from '@/components/SizedBox';
 import Action from './Action';
 import { setFinishDataModal } from '@/pages/Withdrawal/utils/setDataModal';
+import { formatMessage } from '@/utils/locale';
 
 const TextBox = styled.div`
   flex-direction: row;
@@ -20,38 +19,35 @@ const Title = styled.span`
   margin-right: 6px;
 `;
 type Props = {
-  item: any,
-  index:any,
-}
+  item: any;
+  index: any;
+};
 
-
-const Item:React.FC<Props> = ({ item = {} }) => {
+const Item: React.FC<Props> = ({ item = {}, index }) => {
   const [code, setCode] = useState('');
   const [note, setNote] = useState('');
 
-  const id = item?.id
+  const id = item?.id;
 
   const onChangeCode = (input: any) => {
-    const valueRaw = input?.target?.value
-    const value = valueRaw.replaceAll(' ', '')
-    setFinishDataModal(id, { code: value, note })
-    setCode(value)
+    const valueRaw = input?.target?.value;
+    const value = valueRaw.replaceAll(' ', '');
+    setFinishDataModal(id, { code: value, note });
+    setCode(value);
   };
 
   const onChangeNote = (input: any) => {
-    const value = input?.target?.value
-    setFinishDataModal(id, { code, note: value })
-    setNote(value)
+    const value = input?.target?.value;
+    setFinishDataModal(id, { code, note: value });
+    setNote(value);
   };
-  const time = item?.created_at
-  ? dayjs.unix(item?.created_at).format('DD/MM/YYYY - HH:mm:ss')
-  : '';
+  const time = item?.created_at ? dayjs(item?.created_at).format('DD/MM/YYYY - HH:mm:ss') : '';
   return (
     <>
-      <SizedBox height="12px" />
+     {!!(index) && <SizedBox height="12px" />}
       <>
-        <TextBox style={{ borderTop: '1px solid #D9D9D9', paddingTop: '12px' }}>
-          <Title>BPOR nháp - {time}</Title> <Tag>Trạng thái: Nháp</Tag>
+        <TextBox style={index ? { borderTop: '1px solid #D9D9D9', paddingTop: '12px' } : {}}>
+          <Title>BPOR nháp - {time}</Title> <Tag>{formatMessage({id:'bpor.status'})}: Nháp</Tag>
         </TextBox>
       </>
 
@@ -61,10 +57,6 @@ const Item:React.FC<Props> = ({ item = {} }) => {
         onChangeCode={onChangeCode}
         onChangeNote={onChangeNote}
         item={item}
-        // selectedId={selectedId}
-        // timeSlotsSelected={timeSlotsSelected}
-        // isNotEdit={isNotEdit}
-        // referenceCode={referenceCode}
       />
     </>
   );

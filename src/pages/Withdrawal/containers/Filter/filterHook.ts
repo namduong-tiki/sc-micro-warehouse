@@ -1,12 +1,12 @@
 import { useContext, useMemo, useState } from "react";
-import { LIST_STATUS_TAB_CANCELED, LIST_STATUS_TAB_DRAFT, LIST_STATUS_TAB_PROCESSING, LIST_STATUS_TAB_SUCCESSFULLY, LIST_STATUS_TAB_WAITING } from "../../constants/status";
+import { LIST_STATUS_TAB_CANCELLED, LIST_STATUS_TAB_DRAFT, LIST_STATUS_TAB_PROCESSING, LIST_STATUS_TAB_SUCCESSFULLY, LIST_STATUS_TAB_WAITING } from "../../constants/status";
 import { TAB_NAME } from "../../constants/tab";
 import { AppContext } from "../../contexts/AppContext";
 
 export const useFilterHook = () => {
     const { query, setQuery } = useContext(AppContext)
 
-    const { code, status, expectedPickupDate, tab } = query
+    const { code, status, expectedPickupDate, tab, referenceCode } = query
 
 
     const [isOpenDrawer, setIsOpenDrawer] = useState(false);
@@ -26,13 +26,36 @@ export const useFilterHook = () => {
     const onSelectDate = (val: any) => {
         setQuery({
             ...query,
-            expectedPickupDate: val.format('YYYY-MM-DD')
+            expectedPickupDate: val ? val.format('YYYY-MM-DD') : null
         })
     };
 
+    const placeholderInput = useMemo(() => {
+        return TAB_NAME.DRAFT === tab ? 'Nhập tối đa 50 mã tham chiếu nhà bán cách nhau bằng dấu ‘ , ‘' : 'Nhập tối đa 50 mã phiếu rút cách nhau bằng dấu ‘ , ‘'
+    }, [tab])
+
     const searchValue = useMemo(() => {
+        if (tab === TAB_NAME.DRAFT) {
+            return referenceCode ? referenceCode.split(',') : []
+        }
         return code ? code.split(',') : []
-    }, [code])
+
+
+    }, [referenceCode, tab, code])
+
+    const onChangeSearch = (data = []) => {
+        if (tab === TAB_NAME.DRAFT) {
+            return setQuery({
+                ...query,
+                referenceCode: data.toString()
+            })
+
+        }
+        return setQuery({
+            ...query,
+            code: data.toString()
+        })
+    }
 
     const statusValue = useMemo(() => {
         return status ? status.split(',') : []
@@ -48,19 +71,14 @@ export const useFilterHook = () => {
                 return LIST_STATUS_TAB_WAITING
             case TAB_NAME.SUCCESSFULLY:
                 return LIST_STATUS_TAB_SUCCESSFULLY
-            case TAB_NAME.CANCELED:
-                return LIST_STATUS_TAB_CANCELED
+            case TAB_NAME.CANCELLED:
+                return LIST_STATUS_TAB_CANCELLED
 
             default: return []
         }
     }, [tab])
 
-    const onChangeSearch = (data = []) => {
-        setQuery({
-            ...query,
-            code: data.toString()
-        })
-    }
+
 
     return {
         statusValue,
@@ -73,5 +91,6 @@ export const useFilterHook = () => {
         searchValue,
         onChangeSearch,
         optionsStatus,
+        placeholderInput
     }
 }

@@ -24,12 +24,13 @@ const RightColum: React.FC<Props> = ({
   items,
   isLoadingDraft,
   warehouse,
-  onOpenImportProductModal
+  onOpenImportProductModal,
+  onExport
 }) => {
   return (
     <>
       <Container>
-        <Header record={record} status={status} onOpenImportProductModal={onOpenImportProductModal}/>
+        <Header onExport={onExport} id={record?.id} status={status} onOpenImportProductModal={onOpenImportProductModal}/>
         <Content
           onChangeValueItem={onChangeValueItem}
           onRemoveItem={onRemoveItem}

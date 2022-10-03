@@ -37,16 +37,16 @@ const Title: React.FC<Props> = ({ record }) => {
       <Col>
         <Row>
           <HeadTitle1>
-            {formatMessage({ id: 'Phiếu rút hàng' })} {code && code}
+            {formatMessage({ id: 'bpor' })} {code && code}
           </HeadTitle1>
           <SizedBox width="12px" />
           <Tag color={data?.color}>
-            {`${formatMessage({ id: 'Trạng thái' })}: `}
+            {`${formatMessage({ id: 'bpor.status' })}: `}
             {data?.status}
           </Tag>
           {data?.isReadyToReturn && (
             <Tag color={'warning'}>
-              {formatMessage({ id: 'Lịch lấy hàng' })}: {dayjs().format('DD/MM/YYYY - HH:mm:ss')}
+              {formatMessage({ id: 'bpor.pickup_time' })}: {dayjs().format('DD/MM/YYYY - HH:mm:ss')}
             </Tag>
           )}
         </Row>

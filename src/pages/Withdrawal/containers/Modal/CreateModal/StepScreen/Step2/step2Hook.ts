@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect } from 'react';
 import findIndex from 'lodash/findIndex'
 import { CreateContext } from '@/pages/Withdrawal/contexts/CreateContext';
@@ -59,7 +60,6 @@ export const useStep2 = () => {
       }
       return null;
     } catch (error) {
-      console.log('erroe',error)
       return showErrorGeneral()
     }
   }

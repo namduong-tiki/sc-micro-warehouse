@@ -129,7 +129,7 @@ const Warehouse = ({warehouses = [],onChangeWarehouseSelected,warehouseCode}:War
                   </Tag>
                 ))}
               </ContentContainer>
-            :  formatMessage({ id: 'Kho hàng' })
+            :  formatMessage({ id: 'bpor.warehouseCamel' })
 
             }
             <SizedBox width='12px' />

@@ -22,30 +22,30 @@ const ContentContainer = styled.div`
   margin-left: 8px;
 `;
 const StyledTable = styled(Table)`
-  &&& .ant-table {
+   .ant-table {
     .ant-table-container {
       border-left: 1px solid #d9d9d9;
       border-top: 1px solid #d9d9d9;
     }
-    & .ant-table-thead > tr:nth-child(1) > th.ant-table-cell:nth-child(3) {
+     .ant-table-thead > tr:nth-child(1) > th.ant-table-cell:nth-child(3) {
       border-left: 1px solid #d9d9d9;
     }
-    & .ant-table-thead > tr > th.ant-table-cell {
+     .ant-table-thead > tr > th.ant-table-cell {
       background-color: #f5f5f5;
       border-bottom: 1px solid #d9d9d9;
       border-right: 1px solid #d9d9d9;
     }
-    & .ant-table-tbody > tr > td.ant-table-cell {
+     .ant-table-tbody > tr > td.ant-table-cell {
       border-right: 1px solid #d9d9d9;
       border-bottom: 1px solid #d9d9d9;
     }
-    & .ant-table-tbody > tr > td.ant-table-cell:last-child {
+     .ant-table-tbody > tr > td.ant-table-cell:last-child {
       border-right: 1px solid #d9d9d9;
       border-bottom: 1px solid #d9d9d9;
       border-left: 1px solid #d9d9d9;
     }
 
-    & .ant-table-tbody > tr:nth-child(2) td {
+     .ant-table-tbody > tr:nth-child(2) td {
       background-color: #e6f7ff;
     }
   }

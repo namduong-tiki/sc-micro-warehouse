@@ -1,6 +1,5 @@
 import { CreateContext } from "@/pages/Withdrawal/contexts/CreateContext";
-import { useContext, useEffect, useMemo, useState } from "react";
-import get from 'lodash/get'
+import { useContext, useEffect, useState } from "react";
 import { getBPORBusiness, getTikiReturnWarehouse } from "@/pages/Withdrawal/services";
 import { showErrorGeneral } from "@/utils/message";
 
@@ -8,7 +7,6 @@ import { showErrorGeneral } from "@/utils/message";
 export const useStep3 = () => {
 
     const {
-        numberWithdrawalSelected,
         sellerIdSelected,
         createData,
         setCreateData,
@@ -87,33 +85,35 @@ export const useStep3 = () => {
         //     index = index + 1
         // }
         // setCreateData(tempArr)
-    
-      return () => {
-        setCreateData([])
-      }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
+        return () => {
+            setCreateData([])
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-  
 
- 
+
+
 
     const onTabChange = (value: any) => {
         setTab(value)
     }
 
-    const onSelectTikiReturnWarehouse = (code:any,warehouseSelected:any) => {
-        const temp = createData.map((i:any)=> {
-            if(i?.code === code){
-                return {...i,tikiReturnWarehouse:warehouseSelected}
+    const onSelectTikiReturnWarehouse = (code: any, warehouseSelected: any) => {
+        const temp = createData.map((i: any) => {
+            if (i?.code === code) {
+                return { ...i, tikiReturnWarehouse: warehouseSelected }
             }
             return i
         })
         setCreateData(temp)
     }
 
-    const onSelectCustomerInformation = (code:any,warehouseSelected:any) => {
-        console.log('code:any,warehouseSelected:any',code,warehouseSelected)
+    const onSelectCustomerInformation = (code: any, warehouseSelected: any) => {
+        return {
+            code, warehouseSelected
+        }
     }
 
     return {

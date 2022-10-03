@@ -22,7 +22,7 @@ const columns = (page = 1,selectedSize = 10) =>  ([
     render: (_:any,record:any) => <p>{record?.id}</p>,
   },
   {
-    title: formatMessage({id:'SKU'}),
+    title: 'SKU',
     dataIndex: 'money',
     width: '18%',
     render: (_:any,record:any) => <p>{record?.sku}</p>,
@@ -33,15 +33,15 @@ const columns = (page = 1,selectedSize = 10) =>  ([
     width: '25%',
     render: (_:any,record:any) => <HoverText fullText={record?.name}><p>{record?.name}</p></HoverText>,
   },
-  {
-    title: formatMessage({id:'SL dự kiến'}),
-    dataIndex: 'address',
-    render: (_:any,record:any) => <p>{record?.expected_qty}</p>,
-    width:90
+  // {
+  //   title: formatMessage({id:'SL dự kiến'}),
+  //   dataIndex: 'address',
+  //   render: (_:any,record:any) => <p>{record?.expected_qty}</p>,
+  //   width:90
 
-  },
+  // },
   {
-    title: formatMessage({id:'Trạng thái'}),
+    title: formatMessage({id:'bpor.status'}),
     dataIndex: 'address',
     render: (_:any,record:any) => {
       const row = get(record,['errors',0,'row'],'')
@@ -73,7 +73,7 @@ const Step2 = ({products = []}) => {
               setPage(_page)
               setSelectedSize(pageSize)
             },
-            showTotal: (total, range) => `${range[0]}-${range[1]}(${formatMessageHook({id:'Tổng cộng'})}: ${total})`,
+            showTotal: (total, range) => `${range[0]}-${range[1]}(${formatMessageHook({id:'bpor.sum.total'})}: ${total})`,
         }}
           rowKey='id'
         />

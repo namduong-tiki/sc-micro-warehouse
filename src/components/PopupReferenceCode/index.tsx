@@ -27,7 +27,7 @@ const PopupReferenceCode: React.FC<Props> = ({
   return (
     <Popover
       visible={isShowPopup}
-      title={() => <p>{formatMessage({ id: 'Mã tham chiếu nhà bán' })}</p>}
+      title={() => <p>{formatMessage({ id: 'bpor.reference_code' })}</p>}
       overlayStyle={{ width: 264 }}
       content={
         <Content
@@ -64,16 +64,16 @@ const Content: React.FC<Props> = ({ onClosePopup, value, onChangeInput }) => {
     <>
       <Input
         value={valueInput}
-        placeholder={formatMessage({ id: 'Nhập mã tham chiếu nhà bán' })}
+        placeholder={formatMessage({ id: 'bpor.input_reference_code' })}
         style={{ width: '100%' }}
         onChange={onChange}
       />
       <SizedBox height="16px" />
       <ButtonContainer>
-        <Button onClick={onClosePopup}>{formatMessage({ id: 'Huỷ bỏ' })}</Button>
+        <Button onClick={onClosePopup}>{formatMessage({ id: 'bpor.cancel' })}</Button>
         <SizedBox width="8px" />
         <Button type="primary" onClick={onSave}>
-          {formatMessage({ id: 'Lưu' })}
+          {formatMessage({ id: 'bpor.save' })}
         </Button>
       </ButtonContainer>
     </>
